@@ -1,0 +1,1962 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clientes Full Price – Nike CL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --text:#202124; --muted:#5f6368; --faint:#80868b;
+  --line:#dadce0; --line-soft:#eceff1; --head:#e8f0fe; --hover:#f6f8fc; --drop:#f8faff;
+  --accent:#1a73e8; --accent-soft:#e8f0fe;
+  --g1:#4285f4; --g2:#12b5cb; --g3:#34a853; --g4:#fbbc04; --g5:#ea4335;
+  --fp:#1a73e8; --nofp:#f29900; --s1:#c6dafc; --s2:#7baaf7; --s3:#1a73e8;
+  --up:#188038; --down:#d93025; --ok:#188038; --warn:#b06000; --err:#d93025;
+  --shadow:0 1px 2px rgba(60,64,67,.30),0 1px 3px 1px rgba(60,64,67,.15);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1c1f; --surface:#26272b; --text:#e8eaed; --muted:#a6acb3; --faint:#80868b;
+    --line:#3c4043; --line-soft:#303236; --head:#2a3550; --hover:#2e3035; --drop:#22262e;
+    --accent:#8ab4f8; --accent-soft:#2a3550;
+    --g1:#669df6; --g2:#4ecde6; --g3:#5bb974; --g4:#fcc934; --g5:#ee675c;
+    --fp:#8ab4f8; --nofp:#fdd663; --s1:#3b4f73; --s2:#5b84c9; --s3:#8ab4f8;
+    --up:#81c995; --down:#f28b82; --ok:#81c995; --warn:#fdd663; --err:#f28b82;
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 1px 3px 1px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1c1f; --surface:#26272b; --text:#e8eaed; --muted:#a6acb3; --faint:#80868b;
+  --line:#3c4043; --line-soft:#303236; --head:#2a3550; --hover:#2e3035; --drop:#22262e;
+  --accent:#8ab4f8; --accent-soft:#2a3550;
+  --g1:#669df6; --g2:#4ecde6; --g3:#5bb974; --g4:#fcc934; --g5:#ee675c;
+  --fp:#8ab4f8; --nofp:#fdd663; --s1:#3b4f73; --s2:#5b84c9; --s3:#8ab4f8;
+  --up:#81c995; --down:#f28b82; --ok:#81c995; --warn:#fdd663; --err:#f28b82;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 1px 3px 1px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.page{max-width:1260px;margin:0 auto;padding:22px 20px 48px}
+.muted{color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 20px;margin-bottom:16px}
+.top h1{margin:0;font-size:20px;font-weight:500}
+.top p{margin:2px 0 0;color:var(--muted);font-size:12.5px}
+.top .range{font-size:12.5px;color:var(--muted)}
+.top .range b{color:var(--text);font-weight:500}
+.loader{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:start}
+.loader-col{display:grid;gap:14px}
+@media (max-width:820px){.loader{grid-template-columns:1fr}}
+.card{background:var(--surface);border-radius:6px;box-shadow:var(--shadow)}
+.drop{padding:12px 14px 14px;border:1px dashed transparent;transition:border-color .15s,background .15s}
+.drop.over{border-color:var(--accent);background:var(--drop)}
+.drop-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+.drop-head h2{margin:0;font-size:13.5px;font-weight:700}
+.drop-head span{font-size:12px;color:var(--muted)}
+.drop-hint{margin:0 0 10px;font-size:12px;color:var(--muted)}
+.slots{display:grid;gap:6px}
+.slot{display:flex;align-items:center;gap:10px;min-height:36px;padding:6px 10px;border-radius:4px;border:1px solid var(--line-soft);background:var(--surface)}
+.slot.free{border:1px dashed var(--line);color:var(--faint);cursor:pointer;justify-content:space-between}
+.slot.free:hover{border-color:var(--accent);color:var(--accent)}
+.slot .n{flex:none;width:18px;color:var(--faint);font-size:12px;text-align:right}
+.slot .f{flex:1;min-width:0}
+.slot .fn{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot .fm{display:block;font-size:11.5px;color:var(--muted)}
+.slot .fm.warn{color:var(--warn)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:5px 12px;cursor:pointer;color:var(--accent);font-weight:500;font-size:12.5px}
+.btn:hover{background:var(--accent-soft)}
+.btn.ghost{border-color:transparent;color:var(--muted);padding:4px 8px}
+.btn.ghost:hover{color:var(--err);background:transparent}
+.btn[disabled]{opacity:.45;cursor:default}
+.privacy{margin:10px 0 0;font-size:11.5px;color:var(--faint)}
+.status{min-height:20px;margin:10px 2px 0;font-size:12.5px;color:var(--muted)}
+.status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.err{color:var(--err)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:18px 0 0}
+.ctl{display:flex;flex-direction:column;justify-content:center;min-width:130px;padding:4px 10px 5px;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+.ctl label{font-size:11px;color:var(--muted);line-height:1.3}
+.ctl select,.ctl input[type=date]{border:0;background:transparent;padding:1px 0;outline-offset:3px;min-width:0}
+.controls .spacer{flex:1}
+.check{display:flex;align-items:center;gap:7px;font-size:12.5px;cursor:pointer}
+.check input{accent-color:var(--accent);width:15px;height:15px}
+details.params{margin-top:14px}
+details.params>summary{list-style:none;cursor:pointer;padding:10px 14px;font-weight:500;display:flex;align-items:center;gap:8px;user-select:none}
+details.params>summary::-webkit-details-marker{display:none}
+details.params>summary::before{content:"";width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s;margin-right:2px;flex:none}
+details.params[open]>summary::before{transform:rotate(45deg)}
+details.params>summary .sum-txt{font-weight:400;color:var(--muted);font-size:12px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;padding:0 14px 14px}
+.pbox{border:1px solid var(--line-soft);border-radius:4px;padding:10px 12px}
+.pbox h3{margin:0 0 8px;font-size:12.5px;font-weight:700}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:5px 0;font-size:12.5px}
+.prow input[type=number]{width:64px;padding:3px 6px;border:1px solid var(--line);border-radius:4px;background:var(--surface);text-align:right}
+.pbox textarea,.pbox input[type=text]{display:block;width:100%;margin-top:4px;padding:5px 7px;border:1px solid var(--line);border-radius:4px;background:var(--surface);font-size:12px;line-height:1.4}
+.pbox textarea{min-height:58px;resize:vertical}
+.pnote{margin:6px 0 0;font-size:11.5px;color:var(--muted)}
+.pfoot{padding:0 14px 14px;display:flex;justify-content:flex-end}
+.intro{margin-top:22px;padding:28px 24px}
+.intro h2{margin:0 0 6px;font-size:15px;font-weight:500}
+.intro p{margin:0 0 14px;color:var(--muted);max-width:72ch}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.cols h3{margin:0 0 4px;font-size:12.5px;font-weight:700}
+.cols p{margin:0;font-size:12px;color:var(--muted);max-width:none}
+hr.sep{border:0;border-top:1px dashed var(--line);margin:24px 0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-top:20px}
+.kpi{padding:10px 12px 9px}
+.kpi-main{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 8px;margin-bottom:6px}
+.kpi-label{font-weight:700;font-size:12.5px;display:flex;align-items:center;gap:6px}
+.kpi-label i{width:9px;height:9px;border-radius:2px;flex:none}
+.kpi-val{font-size:16px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;margin-left:auto}
+.kpi-row{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:12px;padding:2px 0}
+.kpi-row span:first-child{padding-left:16px;font-weight:500;color:var(--muted)}
+.kpi-row span:last-child{font-variant-numeric:tabular-nums;text-align:right}
+.insights{margin-top:14px;padding:12px 14px 6px}
+.insights h2{margin:0 0 8px;font-size:13.5px;font-weight:500}
+.insights ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:0 28px}
+.insights li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line-soft);font-size:12.5px;line-height:1.5}
+.insights li>i{flex:none;width:8px;height:8px;border-radius:50%;margin-top:6px}
+.insights li b{font-weight:700}
+.tcard{overflow:hidden}
+.thead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;padding:10px 12px}
+.thead h2{margin:0;font-size:13.5px;font-weight:500}
+.thead .tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:4px 12px;cursor:pointer;font-size:12.5px;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.viewseg{align-self:center}
+.viewseg button{padding:7px 14px}
+.mini{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.mini select,.mini input{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:3px 6px;font-size:12.5px;color:var(--text)}
+.tbl-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.tbl th{background:var(--head);font-weight:700;text-align:left;padding:8px 9px;white-space:nowrap}
+.tbl th[data-k]{cursor:pointer}
+.tbl th[data-k]:hover{text-decoration:underline;text-underline-offset:3px}
+.tbl th .arrow{margin-left:4px;font-size:11px;color:var(--muted)}
+.tbl td{padding:7px 9px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+.tbl tbody tr:hover td{background:var(--hover)}
+.tbl tfoot td{font-weight:700;border-top:1px solid var(--line);border-bottom:0;background:var(--surface)}
+.tbl .num{text-align:right}
+.tbl .idx{width:30px;color:var(--faint);text-align:right;padding-right:4px}
+.tbl .sub{display:block;font-size:11px;color:var(--faint)}
+.tbl .empty-row{text-align:center;color:var(--muted);padding:22px}
+.up{color:var(--up);font-weight:500} .down{color:var(--down);font-weight:500}
+.mix{display:flex;height:10px;min-width:96px;border-radius:2px;overflow:hidden;background:var(--line-soft)}
+.mix span{display:block;height:100%}
+.badge{display:inline-flex;align-items:center;gap:6px}
+.badge i{width:8px;height:8px;border-radius:50%;flex:none}
+.pager{display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:6px 10px 8px;font-size:12px;color:var(--muted)}
+.pager button{border:0;background:transparent;cursor:pointer;font-size:16px;line-height:1;padding:2px 8px;border-radius:4px;color:var(--text)}
+.pager button[disabled]{opacity:.35;cursor:default}
+.tnote{margin:0;padding:8px 12px 10px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line-soft)}
+.tnote b{color:var(--text);font-weight:500}
+.placeholder{padding:22px 14px;color:var(--muted);text-align:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.ccard{padding:10px 12px 8px;min-width:0}
+.chead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;margin-bottom:6px}
+.chead h2{margin:0;font-size:13.5px;font-weight:500}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:2px;flex:none}
+.chart-body{width:100%;min-height:180px}
+.chart-body svg{display:block;width:100%;height:auto;overflow:visible}
+.chart-empty{color:var(--muted);text-align:center;padding:50px 10px;margin:0}
+.cnote{margin:4px 0 2px;font-size:11.5px;color:var(--muted)}
+.cnote b{color:var(--text);font-weight:500}
+.mtx{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.mtx th,.mtx td{padding:9px 10px;border-bottom:1px solid var(--line-soft);text-align:right}
+.mtx th{background:var(--head);font-weight:700}
+.mtx th:first-child,.mtx td:first-child{text-align:left}
+.mtx td b{font-size:15px;font-weight:500}
+.mtx .sub{display:block;font-size:11px;color:var(--faint)}
+.hl{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 4px}
+.hl div{border-radius:4px;padding:10px 12px;background:var(--head)}
+.hl b{display:block;font-size:20px;font-weight:500}
+.hl span{font-size:12px;color:var(--muted)}
+.cmp-dates{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:12px;color:var(--muted)}
+.cmp-dates input{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:3px 6px}
+details.method{margin-top:22px}
+details.method>summary{cursor:pointer;padding:10px 14px;font-weight:500}
+details.method .body{padding:0 16px 14px;color:var(--muted);font-size:12.5px;max-width:92ch}
+details.method .body p{margin:0 0 8px}
+details.method .body b{color:var(--text);font-weight:500}
+
+/* Tarjetas para presentación */
+.deck{margin-top:20px;background:#eceef1;border-radius:8px;padding:18px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .deck{background:#121316}}
+:root[data-theme="dark"] .deck{background:#121316}
+.deck-intro{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;font-size:12.5px;color:var(--muted)}
+.slides{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;min-width:0}
+.slide-wrap{display:grid;justify-items:center;gap:8px}
+.slide-box{position:relative;overflow:hidden;border-radius:8px}
+.slide-tools{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+.slide{
+  --bg:#ffffff; --surface:#ffffff; --text:#202124; --muted:#5f6368; --faint:#80868b;
+  --line:#dadce0; --line-soft:#eceff1; --head:#e8f0fe; --hover:#f6f8fc;
+  --accent:#1a73e8; --accent-soft:#e8f0fe;
+  --g1:#4285f4; --g2:#12b5cb; --g3:#34a853; --g4:#fbbc04; --g5:#ea4335;
+  --fp:#1a73e8; --nofp:#f29900; --s1:#c6dafc; --s2:#7baaf7; --s3:#1a73e8;
+  --up:#188038; --down:#d93025;
+  --shadow:0 1px 2px rgba(60,64,67,.30),0 1px 3px 1px rgba(60,64,67,.15);
+  color-scheme:light;
+  position:absolute;left:0;top:0;width:1120px;height:600px;transform-origin:0 0;
+  background:#ffffff;color:#202124;padding:18px 22px 14px;display:flex;flex-direction:column;overflow:hidden;
+  font:12.5px/1.45 Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+.sl-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:12px}
+.sl-title{font-size:17px;font-weight:500}
+.sl-sub{font-size:12px;color:var(--muted)}
+.sl-body{flex:1;min-height:0;display:flex;flex-direction:column}
+.sl-body>*{flex:none}
+.sl-foot{font-size:10.5px;color:var(--faint);margin-top:8px}
+.slide .card,.slide .sl-card{border:1px solid #e3e6ea}
+.slide .kpi{padding:9px 10px 8px}
+.slide .kpi-main{flex-wrap:wrap;row-gap:1px;margin-bottom:4px}
+.slide .kpi-label{white-space:nowrap;font-size:12px}
+.slide .kpi-val{font-size:15px;margin-left:auto}
+.slide .kpi-row{font-size:11.5px;padding:1px 0}
+.slide .kpi-row span:first-child{padding-left:14px}
+.slide .kpi-val,.slide .kpi-row span:last-child,.slide .sl-tbl{font-variant-numeric:normal}
+.sl-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.sl-sep{border:0;border-top:1px dashed var(--line);margin:10px 0;flex:none}
+.sl-row{display:grid;gap:14px;align-items:start}
+.sl-card{background:var(--surface);border-radius:6px;box-shadow:var(--shadow);overflow:hidden}
+.sl-card h3{margin:0;padding:9px 12px 5px;font-size:13px;font-weight:500}
+.sl-legend{padding:0 12px}
+.sl-chart{padding:0 10px 6px}
+.sl-note{margin:0;padding:2px 12px 9px;font-size:11.5px;color:var(--muted);line-height:1.4}
+.sl-note b{color:var(--text);font-weight:500}
+.sl-text{margin:0;padding:2px 14px 12px;font-size:13.5px;line-height:1.5}
+.sl-text b{font-weight:700}
+.sl-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.sl-tbl th{background:var(--head);font-weight:700;text-align:left;padding:7px 8px;white-space:nowrap}
+.sl-tbl td{padding:6px 8px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+.sl-tbl .num{text-align:right}
+.sl-tbl .idx{color:var(--faint);width:24px;text-align:right;padding-right:2px}
+.sl-tbl tfoot td{font-weight:700;border-bottom:0;border-top:1px solid var(--line)}
+.sl-tbl .sub{display:block;font-size:10.5px;color:var(--faint)}
+.sl-tbl .mix{min-width:80px}
+.sl-empty{padding:36px 12px;text-align:center;color:var(--muted)}
+.sl-ins{list-style:none;margin:0;padding:2px 14px 8px;display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+.sl-ins li{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line-soft);font-size:13.5px;line-height:1.5}
+.sl-ins li i{flex:none;width:9px;height:9px;border-radius:50%;margin-top:7px}
+.sl-ins li b{font-weight:700}
+.sl-segs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.sl-seg{background:var(--surface);border-radius:6px;box-shadow:var(--shadow);border:1px solid #e3e6ea;border-top:4px solid var(--fc);padding:9px 12px 8px}
+.sl-seg .nm{display:block;font-weight:700;font-size:13px;margin-bottom:6px}
+.sl-seg .r{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);padding:2px 0}
+.sl-seg .r b{color:var(--text);font-weight:500}
+.sl-seg .big{display:block;font-size:22px;font-weight:500;margin:2px 0 0}
+.sl-seg .lab{display:block;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+.sl-hl{display:grid;gap:10px}
+.sl-bars{padding:4px 14px 12px;display:grid;gap:10px}
+.sl-bar .lb{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px}
+.sl-bar .bar{display:flex;height:22px;border-radius:4px;overflow:hidden}
+.sl-bar .bar span{display:flex;align-items:center;padding:0 8px;color:#fff;font-size:12px;font-weight:500;white-space:nowrap}
+.sl-hl div{border-radius:6px;padding:12px 14px;background:var(--head)}
+.sl-hl b{display:block;font-size:24px;font-weight:500}
+.sl-hl span{font-size:12.5px;color:var(--muted)}
+
+@media (max-width:560px){
+  .page{padding:16px 12px 40px}
+  .ctl{min-width:calc(50% - 5px);flex:1 1 calc(50% - 5px)}
+  .insights ul{grid-template-columns:1fr}
+  .hl{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div>
+      <h1>Clientes Full Price – Nike CL</h1>
+      <p>Quiénes compran sin descuento, cuánto valen, cómo cambian entre compras y dónde está la oportunidad.</p>
+    </div>
+    <div class="range" id="range" aria-live="polite"></div>
+  </header>
+
+  <section class="loader" aria-label="Carga de archivos">
+    <div class="card drop" id="drop-sales">
+      <div class="drop-head">
+        <h2>Venta</h2>
+        <span id="count-sales">0 de 12 archivos</span>
+      </div>
+      <p class="drop-hint">Export de Análisis Daily Bases Tabla (.csv o .xlsx), con Email, Order, Fecha, SC, SKUName, Unidades, totales y Descuento. Puedes cargar varios períodos: se unen y se quitan las líneas repetidas.</p>
+      <div class="slots" id="slots-sales"></div>
+      <input type="file" id="in-sales" accept=".csv,.txt,.xlsx,.xls" multiple hidden>
+    </div>
+    <div class="loader-col">
+    <div class="card drop" id="drop-cat">
+      <div class="drop-head">
+        <h2>Catálogo VTEX (precio full)</h2>
+        <span id="count-cat">0 de 2 archivos</span>
+      </div>
+      <p class="drop-hint">Export Catalogados VTEX (.xlsx o .csv) con SC y Precio full. Define qué se vendió a precio full: el precio pagado por unidad se compara con el precio full del catálogo. También aporta división, género, tipo de producto y disciplina.</p>
+      <div class="slots" id="slots-cat"></div>
+      <input type="file" id="in-cat" accept=".xlsx,.xls,.csv,.txt" multiple hidden>
+    </div>
+    <div class="card drop" id="drop-stock">
+      <div class="drop-head">
+        <h2>Stock por SKU (opcional)</h2>
+        <span id="count-stock">0 de 5 archivos</span>
+      </div>
+      <p class="drop-hint">Export Stock detail by SKU. Completa división, género y categoría de los productos que no estén en el catálogo VTEX.</p>
+      <div class="slots" id="slots-stock"></div>
+      <input type="file" id="in-stock" accept=".xlsx,.xls,.csv,.txt" multiple hidden>
+      <p class="privacy">Todo se procesa en tu navegador: los correos y nombres de clientes no salen de este equipo. En pantalla los correos se muestran enmascarados; solo la descarga de segmentos los incluye completos.</p>
+    </div>
+    </div>
+  </section>
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <details class="card params" id="params">
+    <summary>Criterios <span class="sum-txt" id="params-sum"></span></summary>
+    <div class="pgrid">
+      <div class="pbox">
+        <h3>Full Price</h3>
+        <div class="prow"><label for="p-thr">Cliente Full Price desde (% de su revenue)</label><input type="number" min="1" max="100" id="p-thr"></div>
+        <p class="pnote">Con el catálogo VTEX, una línea es Full Price si el precio pagado por unidad (con IVA) es igual o mayor al Precio full, con 0,5 % de tolerancia. Sin catálogo, se usa la columna Descuento. Un pedido es Full Price si todas sus líneas lo son.</p>
+        <label class="check" style="margin-top:8px"><input type="checkbox" id="p-of"> Contar como descuento los productos en colecciones de ofertas</label>
+        <input type="text" id="p-ofterms" aria-label="Palabras que identifican colecciones de ofertas" spellcheck="false">
+        <p class="pnote">Solo hace falta si no cargas el catálogo VTEX: las rebajas del precio de lista no aparecen en la columna Descuento. Con esta opción, comprar un producto de una colección cuyo nombre contiene estas palabras cuenta como compra con descuento.</p>
+      </div>
+      <div class="pbox">
+        <h3>Segmentos de valor</h3>
+        <div class="prow"><label for="p-top">Alto gasto: top de clientes por revenue (%)</label><input type="number" min="1" max="50" id="p-top"></div>
+        <p class="pnote">Oportunidad: clientes de alto gasto con menos de 20 % de su revenue a precio full.</p>
+      </div>
+      <div class="pbox" style="grid-column:1 / -1">
+        <h3>Venta</h3>
+        <p class="pnote" style="margin-top:0">Revenue = venta neta: Total con Descuento ÷ 1,19 (sin IVA). Se excluyen las bolsas de compra.</p>
+        <label for="p-excl" style="display:block;margin-top:8px;font-size:12.5px">Excluir pedidos cuyo estado contenga (separados por coma)</label>
+        <textarea id="p-excl" spellcheck="false"></textarea>
+        <p class="pnote">Requiere una columna Status o Estado en el archivo de venta.</p>
+      </div>
+    </div>
+    <div class="pfoot"><button type="button" class="btn" id="p-reset">Restablecer valores</button></div>
+  </details>
+
+  <div class="controls" id="controls" hidden>
+    <div class="seg viewseg" role="group" aria-label="Vista" id="view-seg">
+      <button type="button" data-view="analysis" aria-pressed="true">Análisis</button>
+      <button type="button" data-view="deck" aria-pressed="false">Tarjetas para presentación</button>
+    </div>
+    <div class="ctl"><label for="f-from">Desde</label><input type="date" id="f-from"></div>
+    <div class="ctl"><label for="f-to">Hasta</label><input type="date" id="f-to"></div>
+    <span class="spacer"></span>
+    <button type="button" class="btn" id="f-clear">Usar todo el período</button>
+  </div>
+
+  <section class="card intro" id="intro">
+    <h2>Carga la venta para empezar</h2>
+    <p>Con la venta se arma la base de clientes por correo: cuántos compran sin descuento, cuánto valen, cómo cambian entre su primera y segunda compra, qué productos prefieren y dónde está la oportunidad. Para el mix por división, género y categoría, suma el stock por SKU como catálogo.</p>
+    <div class="cols">
+      <div><h3>Venta: columnas que se usan</h3><p>Email, Order, Fecha, Status (si existe), SC, ReferenceCode, SKUName, Colecciones, Unidades, Total sin Descuento, Total con Descuento y Descuento.</p></div>
+      <div><h3>Catálogo VTEX: columnas que se usan</h3><p>SC, Nombre, Categoría (tipo de producto), Division, Género, Disciplina, Precio full y Precio oferta.</p></div>
+      <div><h3>Período recomendado</h3><p>Al menos 6 meses. Con menos, casi nadie alcanza a comprar dos veces y la segmentación RFM, la 2ª compra y la estacionalidad pierden sentido.</p></div>
+    </div>
+  </section>
+
+  <main id="dash" hidden>
+    <div class="kpis" id="kpis"></div>
+
+    <section class="card insights" aria-labelledby="ins-h">
+      <h2 id="ins-h">Lecturas clave</h2>
+      <ul id="insights"></ul>
+    </section>
+
+    <hr class="sep">
+
+    <section class="card tcard" aria-labelledby="t-seg-h">
+      <div class="thead"><h2 id="t-seg-h">Segmentación Full Price</h2></div>
+      <div id="t-seg"></div>
+      <p class="tnote">Segmentos según el % del revenue de cada cliente que fue en pedidos sin descuento: Full Price Puro 100 %, Predominante 50 a 99 %, Mixto 20 a 49 %, Predominante Promocional 1 a 19 %, Nunca Full Price 0 %. 2+ divisiones y % gasto hombre requieren el stock como catálogo.</p>
+    </section>
+
+    <hr class="sep">
+
+    <div class="two">
+      <section class="card ccard" aria-labelledby="c-sec-h">
+        <div class="chead"><h2 id="c-sec-h">¿Qué pasa en la 2ª compra?</h2></div>
+        <div id="second"></div>
+      </section>
+      <section class="card ccard" aria-labelledby="c-pat-h">
+        <div class="chead"><h2 id="c-pat-h">Pedidos Full Price vs. con descuento</h2></div>
+        <div id="patterns"></div>
+      </section>
+    </div>
+
+    <hr class="sep">
+
+    <section class="card tcard" aria-labelledby="t-mix-h">
+      <div class="thead">
+        <h2 id="t-mix-h">Mix de producto y Full Price</h2>
+        <div class="tools">
+          <div class="seg" role="group" aria-label="Ver mix por" id="dim-seg">
+            <button type="button" data-dim="div" aria-pressed="true">División</button>
+            <button type="button" data-dim="gender" aria-pressed="false">Género</button>
+            <button type="button" data-dim="tipo" aria-pressed="false">Tipo de producto</button>
+            <button type="button" data-dim="cat" aria-pressed="false">Disciplina</button>
+            <button type="button" data-dim="fr" aria-pressed="false">Franquicia</button>
+          </div>
+        </div>
+      </div>
+      <div id="t-mix"></div>
+      <p class="tnote" id="mix-note"></p>
+    </section>
+
+    <hr class="sep">
+
+    <section class="card ccard" aria-labelledby="c-sea-h">
+      <div class="chead"><h2 id="c-sea-h">Estacionalidad: % del revenue a precio full</h2></div>
+      <div class="legend" id="lg-sea"></div>
+      <div class="chart-body" id="c-sea"></div>
+      <p class="cnote" id="sea-note"></p>
+    </section>
+
+    <hr class="sep">
+
+    <section class="card tcard" aria-labelledby="t-cmp-h">
+      <div class="thead">
+        <h2 id="t-cmp-h">Comparación de períodos</h2>
+        <div class="cmp-dates">
+          <span>Período A</span><input type="date" id="cmp-a1" aria-label="Período A desde"><input type="date" id="cmp-a2" aria-label="Período A hasta">
+          <span>Período B</span><input type="date" id="cmp-b1" aria-label="Período B desde"><input type="date" id="cmp-b2" aria-label="Período B hasta">
+        </div>
+      </div>
+      <div id="t-cmp"></div>
+      <p class="tnote" id="cmp-note"></p>
+    </section>
+
+    <hr class="sep">
+
+    <section class="card tcard" aria-labelledby="t-rfm-h">
+      <div class="thead"><h2 id="t-rfm-h">RFM cruzado con Full Price</h2></div>
+      <div id="t-rfm"></div>
+      <p class="tnote" id="rfm-note"></p>
+    </section>
+
+    <hr class="sep">
+
+    <section class="card tcard" aria-labelledby="t-opp-h">
+      <div class="thead"><h2 id="t-opp-h">La oportunidad: alto gasto que compra con descuento</h2></div>
+      <div class="kpis" id="opp-kpis" style="margin:0 12px 12px"></div>
+      <div id="t-opp"></div>
+      <p class="tnote" id="opp-note"></p>
+    </section>
+
+    <hr class="sep">
+
+    <section class="card tcard" aria-labelledby="t-exp-h">
+      <div class="thead">
+        <h2 id="t-exp-h">Descargar segmentos para activar</h2>
+        <div class="tools">
+          <label class="mini">Segmento <select id="exp-seg"></select></label>
+          <button type="button" class="btn" id="exp-btn">Descargar lista (CSV)</button>
+        </div>
+      </div>
+      <div id="t-exp"></div>
+      <p class="tnote">La lista incluye correo, segmento Full Price, segmento RFM, pedidos, revenue neto, ticket promedio y fechas de primera y última compra. Úsala según la política de datos de la cuenta.</p>
+    </section>
+
+    <details class="card method">
+      <summary>Cómo se calcula</summary>
+      <div class="body">
+        <p><b>Cliente.</b> Se identifica por el correo (Email), en minúsculas. Un pedido es un Order distinto; su fecha es la de su primera línea.</p>
+        <p><b>Revenue.</b> Venta neta: Total con Descuento ÷ 1,19. Se excluyen las bolsas de compra y los pedidos cuyo estado contiene los términos de Criterios (cancelado, pagamento pendente, etc.).</p>
+        <p><b>Pedido Full Price.</b> Todas sus líneas se pagaron a precio full. Con el catálogo VTEX cargado, una línea es Full Price si Total con Descuento ÷ Unidades (con IVA) es igual o mayor al Precio full del catálogo, con 0,5 % de tolerancia: así se detectan tanto los cupones como las rebajas de precio de lista. Los productos que no están en el catálogo usan la columna Descuento (Descuento en 0). Los descuentos de envío no cuentan. El precio full es el del catálogo cargado: si un producto subió de precio después de una venta, esa venta puede aparecer con descuento.</p>
+        <p><b>Cliente Full Price.</b> Al menos el 50 % de su revenue (editable) fue en pedidos Full Price. Los 5 segmentos se arman con ese mismo %: 100 %, 50 a 99 %, 20 a 49 %, 1 a 19 % y 0 %.</p>
+        <p><b>2ª compra.</b> Para clientes con dos o más pedidos en el período, se compara su primer pedido con el segundo.</p>
+        <p><b>Mix de producto.</b> Por línea: una línea es Full Price si no tiene descuento. Gasto de clientes FP y No FP: cómo se reparte el revenue de cada grupo entre divisiones, géneros, categorías o franquicias. La franquicia sale del nombre del producto; con el stock cargado se mide sobre el gasto en calzado.</p>
+        <p><b>RFM.</b> Recencia: días desde la última compra hasta el fin del período, en quintiles (5 = más reciente). Frecuencia: 1 pedido = 1, 2 = 3, 3 = 4, 4 o más = 5. Monto: revenue en quintiles. Champions: R ≥ 4, F ≥ 4 y M ≥ 4. Leales: R ≥ 3 y F ≥ 3. Potenciales: R ≥ 4, un pedido y M ≥ 4. Nuevos: R ≥ 4 y un pedido. En riesgo: R ≤ 2 y F ≥ 3. Dormidos: R = 3 y un pedido. Perdidos: R ≤ 2 y un pedido.</p>
+        <p><b>Oportunidad.</b> Clientes en el top de revenue (20 % por defecto) con menos de 20 % de su revenue a precio full.</p>
+      </div>
+    </details>
+  </main>
+
+  <section class="deck" id="deck" hidden aria-label="Tarjetas para presentación">
+    <div class="deck-intro">
+      <span>Cada tarjeta se ajusta a tu pantalla para que la captures completa, o descárgala en PNG. Usa el período y los criterios elegidos, y siempre sale en fondo claro.</span>
+      <label class="check"><input type="checkbox" id="deck-titles" checked> Mostrar título y fuente</label>
+    </div>
+    <div class="slides" id="slides"></div>
+  </section>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- Constantes ---------- */
+const MAXF = {sales:12, cat:2, stock:5};
+const FP_TOL = 0.005;
+const IVA = 1.19;
+const EXCL_DEFAULT = 'cancelado, carência para cancelamento, pagamento pendente, aprovar pagamento, cancel, cancelar, payment pending, approve payment';
+const OF_DEFAULT = 'ofertas, outlet, sale, liquidación';
+const DEFAULTS = {fpThr:50, of:false, ofTerms:OF_DEFAULT, top:20, excl:EXCL_DEFAULT};
+const STORE_KEY = 'clientes-fp-params-v1';
+const SEGS = [
+  {k:'puro',   label:'Full Price Puro',          short:'FP Puro',       range:'100 %',     v:'--g1'},
+  {k:'predom', label:'Full Price Predominante',  short:'FP Predom.',    range:'50 a 99 %', v:'--g2'},
+  {k:'mixto',  label:'Mixto',                    short:'Mixto',         range:'20 a 49 %', v:'--g3'},
+  {k:'promo',  label:'Predominante Promocional', short:'Predom. Promo', range:'1 a 19 %',  v:'--g4'},
+  {k:'nunca',  label:'Nunca Full Price',         short:'Nunca FP',      range:'0 %',       v:'--g5'}
+];
+const SEG = Object.fromEntries(SEGS.map(s => [s.k, s]));
+const SEG_COLOR = Object.fromEntries(SEGS.map(s => [s.k, `var(${s.v})`]));
+const RFM_SEGS = ['Champions', 'Leales', 'Potenciales', 'Nuevos', 'En riesgo', 'Dormidos', 'Perdidos'];
+const DIV_NAMES = {FOOTWEAR:'Footwear', APPAREL:'Apparel', EQUIPMENT:'Equipment'};
+const DIV_ORDER = ['FOOTWEAR', 'APPAREL', 'EQUIPMENT'];
+const DIVBIT = {FOOTWEAR:1, APPAREL:2, EQUIPMENT:4};
+const FRANCHISES = [
+  ['Air Force 1', /air force 1|\baf-?1\b/],
+  ['Air Jordan 1', /(air )?jordan 1\b/],
+  ['Air Max', /air max/],
+  ['Dunk', /\bdunk\b/],
+  ['Pegasus', /pegasus/],
+  ['Vomero', /vomero/],
+  ['Cortez', /cortez/],
+  ['Blazer', /blazer/],
+  ['P-6000', /p-?6000/],
+  ['Shox', /\bshox\b/],
+  ['Court Vision', /court vision/],
+  ['Killshot', /killshot/],
+  ['Metcon', /metcon/],
+  ['V2K / V5', /\bv2k\b|\bv5\b/],
+  ['Air Zoom', /\bzoom\b/],
+  ['Revolution', /revolution/],
+  ['Jordan (otras)', /\bjordan\b/]
+];
+
+/* ---------- Estado ---------- */
+let params = loadParams();
+const state = {salesFiles:[], catFiles:[], stockFiles:[], filters:{from:'', to:''}, view:'analysis', dim:'div', tables:{}, cmp:null, expSeg:'oportunidad', deckTitles:true};
+let ROWS = [], ATTR = new Map(), CATP = new Map(), BOUNDS = {min:'', max:''}, LAST = null, DL = null, FPSTAT = null;
+const filesOf = kind => kind === 'sales' ? state.salesFiles : kind === 'cat' ? state.catFiles : state.stockFiles;
+const FR_CACHE = new Map();
+const INTERN = new Map();
+const I = s => { let v = INTERN.get(s); if (v === undefined) { INTERN.set(s, s); v = s; } return v; };
+
+/* ---------- Utilidades ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const norm = s => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const normTxt = v => String(v ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf0 = new Intl.NumberFormat('es-CL', {maximumFractionDigits:0});
+const nf1 = new Intl.NumberFormat('es-CL', {minimumFractionDigits:1, maximumFractionDigits:1});
+const nf2 = new Intl.NumberFormat('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtInt = n => (n == null || !isFinite(n)) ? '—' : nf0.format(Math.round(n));
+const fmtMoney = n => (n == null || !isFinite(n)) ? '—' : '$' + nf0.format(Math.round(n));
+const pct = x => (x == null || !isFinite(x)) ? '—' : nf1.format(x * 100) + '\u00a0%';
+const pct0 = x => (x == null || !isFinite(x)) ? '' : nf0.format(x * 100) + '\u00a0%';
+const pp = x => (x == null || !isFinite(x)) ? '—' : (x > 0 ? '+' : '') + nf1.format(x * 100) + ' pp';
+const varPct = x => (x == null || !isFinite(x)) ? '—' : (x > 0 ? '+' : '') + nf1.format(x * 100) + '\u00a0%';
+const share = (a, b) => b ? a / b : null;
+function fmtCompact(n){
+  if (!isFinite(n)) return '';
+  const a = Math.abs(n);
+  if (a >= 1e6) return (a >= 1e8 ? nf0.format(n/1e6) : nf1.format(n/1e6).replace(/,0$/,'')) + ' M';
+  if (a >= 1e3) return (a >= 1e5 ? nf0.format(n/1e3) : nf1.format(n/1e3).replace(/,0$/,'')) + ' K';
+  return nf0.format(n);
+}
+const money = n => '$' + fmtCompact(n);
+const nextFrame = () => new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
+function title(s){ s = String(s ?? '').trim().toLowerCase(); return s.charAt(0).toUpperCase() + s.slice(1); }
+function maskEmail(e){
+  const [u, d] = String(e).split('@');
+  if (!d) return u.slice(0, 2) + '***';
+  return u.slice(0, Math.min(2, u.length)) + '***@' + d;
+}
+function parseNum(v){
+  if (typeof v === 'number') return isFinite(v) ? v : 0;
+  let s = String(v ?? '').trim();
+  if (!s || /^(null|nan|-|—)$/i.test(s)) return 0;
+  s = s.replace(/[$\s%]/g, '');
+  if (s.includes(',') && s.includes('.')) {
+    s = s.lastIndexOf(',') > s.lastIndexOf('.') ? s.replace(/\./g,'').replace(',', '.') : s.replace(/,/g,'');
+  } else if (s.includes(',')) {
+    s = /^-?\d{1,3}(,\d{3})+$/.test(s) ? s.replace(/,/g,'') : s.replace(',', '.');
+  } else if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) {
+    s = s.replace(/\./g,'');
+  }
+  const n = parseFloat(s);
+  return isFinite(n) ? n : 0;
+}
+function skuStr(v){
+  if (v === '' || v == null) return '';
+  if (typeof v === 'number') return String(Math.round(v));
+  const s = String(v).trim();
+  if (/^null$/i.test(s)) return '';
+  return s.replace(/\.0+$/, '');
+}
+const MONTHS = {ene:0,jan:0,feb:1,mar:2,abr:3,apr:3,may:4,jun:5,jul:6,ago:7,aug:7,sep:8,set:8,oct:9,nov:10,dic:11,dec:11};
+const MONTH_SHORT = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const dkey = (y, m, d) => `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+function parseDate(v){
+  if (v === '' || v == null) return null;
+  if (typeof v === 'number') {
+    if (v > 20000 && v < 80000) { const d = new Date(Math.round((v - 25569) * 86400000)); return dkey(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); }
+    return null;
+  }
+  const s = String(v).trim().toLowerCase();
+  let m = s.match(/^(\d{1,2})[\s\-\/]+([a-zñ]{3,})\.?[\s\-\/,]+(\d{4})/);
+  if (m) { const mo = MONTHS[m[2].slice(0,3)]; if (mo != null) return dkey(+m[3], mo, +m[1]); }
+  m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return dkey(+m[1], +m[2]-1, +m[3]);
+  m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);
+  if (m) { let y = +m[3]; if (y < 100) y += 2000; return dkey(y, +m[2]-1, +m[1]); }
+  return null;
+}
+function dateLabel(k, withYear){
+  if (!k) return '';
+  const [y, m, d] = k.split('-').map(Number);
+  return `${d} ${MONTH_SHORT[m-1]}` + (withYear ? ` ${y}` : '');
+}
+const dayNum = k => Math.round(Date.parse(k + 'T00:00:00Z') / 86400000);
+const fromDay = n => new Date(n * 86400000).toISOString().slice(0, 10);
+const shiftYear = (k, y) => { const [a, b, c] = k.split('-').map(Number); const last = new Date(Date.UTC(a + y, b, 0)).getUTCDate(); return dkey(a + y, b - 1, Math.min(c, last)); };
+
+/* ---------- Atributos de producto ---------- */
+function normDiv(v){
+  const s = norm(v);
+  if (!s) return 'SIN DATO';
+  if (s.includes('footwear') || s.includes('calzado')) return 'FOOTWEAR';
+  if (s.includes('apparel') || s.includes('vestuario') || s.includes('ropa')) return 'APPAREL';
+  if (s.includes('equipment') || s.includes('equipamiento') || s.includes('accesorio')) return 'EQUIPMENT';
+  return String(v).trim().toUpperCase();
+}
+const divLabel = d => DIV_NAMES[d] || (d === 'SIN DATO' ? 'Sin dato' : title(d));
+function normGender(v){
+  const s = norm(v);
+  if (!s || s === 'nan' || s === 'null') return 'Sin dato';
+  if (['hombre','male','men','mens','masculino','man','hombres'].includes(s)) return 'Hombre';
+  if (['mujer','female','women','womens','femenino','woman','mujeres'].includes(s)) return 'Mujer';
+  if (['kids','kid','nino','nina','ninos','ninas','boys','girls','boy','girl','infant','toddler','youth','infantil'].includes(s)) return 'Niños';
+  if (s === 'unisex') return 'Unisex';
+  return title(v);
+}
+const CAT_MAP = [
+  [/estilo de vida|sportswear|^nsw|lifestyle/, 'Estilo de vida'],
+  [/gym|entrenamiento|training|fitness|workout/, 'Entrenamiento'],
+  [/running|trail/, 'Running'],
+  [/futbol|football|soccer/, 'Fútbol'],
+  [/basket/, 'Básquetbol'],
+  [/swim|natacion/, 'Natación'],
+  [/tenis|tennis/, 'Tenis'],
+  [/skate/, 'Skateboarding'],
+  [/action sports/, 'Action sports'],
+  [/acg|outdoor/, 'ACG / Outdoor'],
+  [/golf/, 'Golf'],
+  [/young athletes/, 'Young Athletes'],
+  [/yoga/, 'Yoga'],
+  [/^others?$|^otros?$/, 'Otros']
+];
+function normCat(v){
+  const raw = String(v ?? '').trim();
+  if (!raw || /^[-\s]*$/.test(raw) || /^(nan|null)$/i.test(raw)) return 'Sin dato';
+  const s = raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  if (s.includes('jordan')) return 'Jordan';
+  const first = s.split(',')[0].trim();
+  for (const [re, label] of CAT_MAP) if (re.test(first)) return label;
+  return title(first);
+}
+function franchiseOf(name){
+  let f = FR_CACHE.get(name);
+  if (f) return f;
+  const s = String(name || '').toLowerCase();
+  f = 'Otras';
+  for (const [l, re] of FRANCHISES) if (re.test(s)) { f = l; break; }
+  FR_CACHE.set(name, f);
+  return f;
+}
+const isBag = (sc, name) => /^BOL-/i.test(String(sc || '').trim()) || /^bolsas?\b/i.test(String(name || '').trim());
+
+/* ---------- Lectura de archivos ---------- */
+function detectDelim(firstLine){
+  let delim = ',', best = -1;
+  for (const d of [',', ';', '\t']) {
+    let n = 0, q = false;
+    for (const ch of firstLine) { if (ch === '"') q = !q; else if (ch === d && !q) n++; }
+    if (n > best) { best = n; delim = d; }
+  }
+  return delim;
+}
+// Recorre un CSV línea a línea sin guardar todas las filas en memoria
+function eachCSVRow(text, cb){
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const nl0 = text.indexOf('\n');
+  const delim = detectDelim(nl0 > -1 ? text.slice(0, nl0) : text);
+  const L = text.length;
+  let i = 0;
+  while (i < L) {
+    let j = text.indexOf('\n', i); if (j === -1) j = L;
+    let line = text.slice(i, j);
+    if (line.indexOf('"') === -1) {
+      if (line.charCodeAt(line.length - 1) === 13) line = line.slice(0, -1);
+      if (cb(line.split(delim)) === false) return;
+      i = j + 1; continue;
+    }
+    const row = []; let field = '', q = false, k = i;
+    for (; k < L; k++) {
+      const c = text[k];
+      if (q) { if (c === '"') { if (text[k+1] === '"') { field += '"'; k++; } else q = false; } else field += c; continue; }
+      if (c === '"') q = true;
+      else if (c === delim) { row.push(field); field = ''; }
+      else if (c === '\n') break;
+      else if (c !== '\r') field += c;
+    }
+    row.push(field);
+    if (cb(row) === false) return;
+    i = k + 1;
+  }
+}
+async function readText(file){
+  const buf = await file.arrayBuffer();
+  try { return new TextDecoder('utf-8', {fatal:true}).decode(buf); }
+  catch (e) { return new TextDecoder('windows-1252').decode(buf); }
+}
+async function eachRow(file, cb){
+  if (/\.(csv|txt|tsv)$/i.test(file.name)) { eachCSVRow(await readText(file), cb); return; }
+  if (typeof XLSX === 'undefined') throw new Error('no se pudo cargar el lector de Excel. Revisa tu conexión o guarda el archivo como .csv.');
+  const wb = XLSX.read(new Uint8Array(await file.arrayBuffer()), {type:'array', dense:true, cellText:false, cellHTML:false, cellStyles:false, cellNF:false, cellDates:false});
+  for (const n of wb.SheetNames) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[n], {header:1, raw:true, defval:''});
+    for (const r of rows) if (cb(r) === false) return;
+  }
+}
+function matchHeader(row, spec, required){
+  const hdr = row.map(norm);
+  const idx = {};
+  for (const [k, aliases] of Object.entries(spec)) for (const a of aliases) { const i = hdr.indexOf(a); if (i > -1) { idx[k] = i; break; } }
+  return required.every(k => Array.isArray(k) ? k.some(x => idx[x] != null) : idx[k] != null) ? idx : null;
+}
+const SALES_COLS = {
+  email:['email','correo','mail','clientemail','customeremail'],
+  order:['order','orden','pedido','orderid'],
+  date:['fecha','date','creationdate','dia'],
+  sc:['sc','stylecolor','productcode'],
+  sku:['referencecode','sku','skuid','upc','ean'],
+  name:['skuname','producto','productname'],
+  coll:['colecciones','coleccion','collections','collection'],
+  units:['unidades','units','quantity','cantidad'],
+  net:['totalcondescuento','demandaneta','ventaneta','netsales'],
+  gross:['totalsindescuento','ventabruta','grosssales'],
+  dsc:['descuento','discount','discountvalue'],
+  status:['status','estado','orderstatus','statusdescription','estadodelpedido','estadopedido','estadoorden','situacion','workflowstatus']
+};
+async function parseSalesFile(file){
+  let idx = null, scanned = 0, ivaIncl = true;
+  const out = []; let min = '', max = '';
+  await eachRow(file, row => {
+    if (!idx) {
+      scanned++;
+      const m = matchHeader(row, SALES_COLS, ['email', 'order', 'units', ['net', 'gross']]);
+      if (m) { idx = m; ivaIncl = !['demandaneta','ventaneta','netsales'].includes(m.net != null ? norm(row[m.net]) : ''); }
+      return scanned < 30;
+    }
+    const g = k => idx[k] == null ? '' : row[idx[k]];
+    const e = String(g('email') ?? '').trim().toLowerCase();
+    const o = String(g('order') ?? '').trim();
+    if (!o || /^(null|total)/i.test(o)) return;
+    const fx = ivaIncl ? 1 / IVA : 1;
+    const gross = (idx.gross != null ? parseNum(g('gross')) : 0) * fx;
+    const dscRaw = idx.dsc != null ? parseNum(g('dsc')) : 0;
+    const net = idx.net != null ? parseNum(g('net')) * fx : gross - dscRaw * fx;
+    const units = parseNum(g('units'));
+    const d = parseDate(g('date'));
+    if (d) { if (!min || d < min) min = d; if (!max || d > max) max = d; }
+    const nm = String(g('name') ?? '').split(/\s+Talla:/i)[0].trim();
+    const c = String(g('coll') ?? '').trim();
+    out.push({e: I(e || 'sin-correo:' + o), o, d: d ? I(d) : null, sc: I(String(g('sc') ?? '').trim().toUpperCase()), sku: skuStr(g('sku')),
+      nm: I(nm), cn: c && !/^null$/i.test(c) ? I(normTxt(c)) : '', u: units, n: net, g: gross, x: dscRaw, pu: units > 0 ? net * IVA / units : null,
+      s: idx.status != null ? I(normTxt(g('status'))) : ''});
+  });
+  if (!idx) throw new Error('no encontré las columnas Email, Order, Unidades y Total con Descuento. Revisa que sea el export de Análisis Daily.');
+  if (!out.length) throw new Error('el archivo no tiene líneas de venta.');
+  return {name:file.name, size:file.size, rows:out, min, max, hasStatus: idx.status != null, ivaIncl,
+    clients: new Set(out.map(r => r.e)).size};
+}
+function catGender(v){
+  const s = normTxt(v);
+  if (!s || s === 'nan' || s === 'null' || /^-+$/.test(s)) return 'Sin dato';
+  if (s.includes('unisex')) return 'Unisex';
+  const h = /\bhombre/.test(s), m = /\bmujer/.test(s), k = /\bnin[oa]/.test(s);
+  if (h && !m && !k) return 'Hombre';
+  if (m && !h && !k) return 'Mujer';
+  if (k && !h && !m) return 'Niños';
+  if (m) return 'Mujer';
+  return normGender(s.split(',')[0]);
+}
+function tipoOf(v){
+  const s = String(v ?? '').trim();
+  if (!s || /^(-+|nan|null)$/i.test(s)) return 'Sin dato';
+  return title(s.replace(/-/g, ' / '));
+}
+const CAT_COLS = {
+  sc:['sc','stylecolor','productcode','estilocolor'],
+  full:['preciofull','preciolista','listprice','precionormal','pvp','precio'],
+  offer:['preciooferta','precioventa','sellingprice','preciopromocion'],
+  division:['division'],
+  gender:['genero','gender'],
+  tipo:['categoria','category','tipo','tipodeproducto'],
+  disc:['disciplina','deporte','sport'],
+  name:['nombre','name']
+};
+async function parseCatalogFile(file){
+  let rowsIter = null;
+  if (!/\.(csv|txt|tsv)$/i.test(file.name)) {
+    if (typeof XLSX === 'undefined') throw new Error('no se pudo cargar el lector de Excel. Revisa tu conexión o guarda el archivo como .csv.');
+    const buf = new Uint8Array(await file.arrayBuffer());
+    const names = XLSX.read(buf, {type:'array', bookSheets:true}).SheetNames;
+    const pick = names.find(n => /detalle|catalog|producto/i.test(n)) || names[0];
+    const wb = XLSX.read(buf, {type:'array', dense:true, sheets:[pick], cellText:false, cellHTML:false, cellStyles:false, cellNF:false, cellDates:false});
+    rowsIter = XLSX.utils.sheet_to_json(wb.Sheets[pick], {header:1, raw:true, defval:''});
+  }
+  let idx = null, scanned = 0, offerN = 0;
+  const map = new Map();
+  const handle = row => {
+    if (!idx) { scanned++; idx = matchHeader(row, CAT_COLS, ['sc', 'full']); return scanned < 30; }
+    const sc = String(row[idx.sc] ?? '').trim().toUpperCase();
+    if (!sc || /\s/.test(sc) || map.has(sc)) return;
+    const full = parseNum(row[idx.full]);
+    const offer = idx.offer != null ? parseNum(row[idx.offer]) : 0;
+    if (full > 0 && offer > 0 && offer < full * (1 - FP_TOL)) offerN++;
+    map.set(sc, {full: full > 0 ? full : null, offer: offer > 0 ? offer : null,
+      div: idx.division != null ? normDiv(row[idx.division]) : null, gender: idx.gender != null ? catGender(row[idx.gender]) : null,
+      tipo: idx.tipo != null ? tipoOf(row[idx.tipo]) : null, cat: idx.disc != null ? normCat(row[idx.disc]) : null});
+  };
+  if (rowsIter) { for (const r of rowsIter) if (handle(r) === false) break; }
+  else eachCSVRow(await readText(file), handle);
+  if (!idx) throw new Error('no encontré las columnas SC y Precio full. Revisa que sea el export Catalogados VTEX.');
+  if (!map.size) throw new Error('el archivo no tiene productos.');
+  return {name:file.name, size:file.size, map, scCount:map.size, offerN};
+}
+const STOCK_COLS = {
+  sc:['stylecolor','sc','productcode','estilocolor'],
+  division:['division'],
+  gender:['gender','genero'],
+  category:['category','categoria']
+};
+async function parseStockFile(file){
+  let idx = null, scanned = 0;
+  const map = new Map();
+  await eachRow(file, row => {
+    if (!idx) { scanned++; idx = matchHeader(row, STOCK_COLS, ['sc', ['division', 'gender', 'category']]); return scanned < 30; }
+    const sc = String(row[idx.sc] ?? '').trim().toUpperCase();
+    if (!sc || /\s/.test(sc) || /^TOTAL/.test(sc) || map.has(sc)) return;
+    map.set(sc, {div: normDiv(idx.division != null ? row[idx.division] : ''), gender: normGender(idx.gender != null ? row[idx.gender] : ''),
+      cat: normCat(idx.category != null ? row[idx.category] : '')});
+  });
+  if (!idx) throw new Error('no encontré las columnas StyleColor y Division, Gender o Category.');
+  if (!map.size) throw new Error('el archivo no tiene productos.');
+  return {name:file.name, size:file.size, map, scCount:map.size};
+}
+
+/* ---------- Modelo ---------- */
+const exclTerms = () => String(params.excl ?? EXCL_DEFAULT).split(/[,;\n]+/).map(normTxt).filter(Boolean);
+const ofTerms = () => String(params.ofTerms ?? OF_DEFAULT).split(/[,;\n]+/).map(normTxt).filter(Boolean);
+function rebuild(){
+  ATTR = new Map(); CATP = new Map();
+  for (const f of state.catFiles) for (const [sc, c] of f.map) {
+    if (!CATP.has(sc) && c.full) CATP.set(sc, c.full);
+    if (!ATTR.has(sc) && (c.div || c.gender || c.tipo)) ATTR.set(sc, {div:c.div || 'SIN DATO', gender:c.gender || 'Sin dato', cat:c.cat || 'Sin dato', tipo:c.tipo || 'Sin dato'});
+  }
+  for (const f of state.stockFiles) for (const [sc, a] of f.map) if (!ATTR.has(sc)) ATTR.set(sc, {...a, tipo:'Sin dato'});
+  FPSTAT = {lines:0, n:0, nCat:0};
+  const terms = exclTerms(), oft = params.of ? ofTerms() : [];
+  const seen = new Set(); let dup = 0, min = '', max = '';
+  ROWS = [];
+  for (const f of state.salesFiles) {
+    f.excl = 0; f.exclOrders = new Set(); f.bags = 0; f.attrN = 0;
+    for (const r of f.rows) {
+      if (isBag(r.sc, r.nm)) { f.bags++; continue; }
+      if (r.s && terms.some(t => r.s.includes(t))) { f.excl++; f.exclOrders.add(r.o); continue; }
+      if (r.sku) { const k = r.o + '|' + r.sku; if (seen.has(k)) { dup++; continue; } seen.add(k); }
+      r.a = ATTR.get(r.sc) || null;
+      if (r.a) f.attrN++;
+      r.of = oft.length && r.cn ? oft.some(t => r.cn.includes(t)) : false;
+      r.full = CATP.get(r.sc) || null;
+      r.fpD = r.x <= 0.5;
+      r.fp = (r.full && r.pu != null ? r.pu >= r.full * (1 - FP_TOL) : r.fpD) && !r.of;
+      FPSTAT.lines++; FPSTAT.n += r.n; if (r.full && r.pu != null) FPSTAT.nCat += r.n;
+      r.fr = franchiseOf(r.nm);
+      ROWS.push(r);
+      if (r.d) { if (!min || r.d < min) min = r.d; if (!max || r.d > max) max = r.d; }
+    }
+  }
+  BOUNDS = {min, max};
+  const f = state.filters;
+  if (f.from && (f.from < min || f.from > max)) f.from = '';
+  if (f.to && (f.to < min || f.to > max)) f.to = '';
+  state.cmp = null;
+  return dup ? `${fmtInt(dup)} líneas repetidas entre archivos se contaron una sola vez.` : '';
+}
+function segOf(sh){ if (sh >= 0.9999) return 'puro'; if (sh >= 0.5) return 'predom'; if (sh >= 0.2) return 'mixto'; if (sh > 0.0001) return 'promo'; return 'nunca'; }
+const popcount = b => (b & 1) + ((b >> 1) & 1) + ((b >> 2) & 1);
+function computeCore(from, to){
+  const orders = new Map(), lines = [];
+  for (const r of ROWS) {
+    if (r.d && ((from && r.d < from) || (to && r.d > to))) continue;
+    let o = orders.get(r.o);
+    if (!o) { o = {id:r.o, e:r.e, d:r.d, n:0, g:0, x:0, u:0, fp:true, divs:0, nH:0, nG:0}; orders.set(r.o, o); }
+    o.n += r.n; o.g += r.g; o.x += r.x; o.u += r.u;
+    if (!r.fp) o.fp = false;
+    if (r.d && (!o.d || r.d < o.d)) o.d = r.d;
+    if (r.a) { o.divs |= (DIVBIT[r.a.div] || 0); o.nG += r.n; if (r.a.gender === 'Hombre') o.nH += r.n; }
+    lines.push(r);
+  }
+  const clients = new Map();
+  for (const o of orders.values()) {
+    let c = clients.get(o.e);
+    if (!c) { c = {e:o.e, n:0, nFP:0, u:0, k:0, kFP:0, first:o.d, last:o.d, divs:0, nH:0, nG:0, list:[]}; clients.set(o.e, c); }
+    c.n += o.n; c.u += o.u; c.k++; if (o.fp) { c.nFP += o.n; c.kFP++; }
+    c.divs |= o.divs; c.nH += o.nH; c.nG += o.nG;
+    if (o.d && (!c.first || o.d < c.first)) c.first = o.d;
+    if (o.d && (!c.last || o.d > c.last)) c.last = o.d;
+    c.list.push(o);
+  }
+  const thr = params.fpThr / 100 - 1e-9;
+  for (const c of clients.values()) {
+    c.share = c.n > 0 ? c.nFP / c.n : (c.k ? c.kFP / c.k : 0);
+    c.seg = segOf(c.share);
+    c.isFP = c.share >= thr;
+  }
+  return {orders, clients, lines, from, to};
+}
+function groupStats(list){
+  const g = {cl:0, k:0, n:0, u:0, nH:0, nG:0, multi:0, withDiv:0};
+  for (const c of list) {
+    g.cl++; g.k += c.k; g.n += c.n; g.u += c.u; g.nH += c.nH; g.nG += c.nG;
+    if (c.divs) { g.withDiv++; if (popcount(c.divs) >= 2) g.multi++; }
+  }
+  g.aov = share(g.n, g.k); g.rpc = share(g.n, g.cl); g.freq = share(g.k, g.cl); g.upo = share(g.u, g.k); g.ppu = share(g.n, g.u);
+  g.multiP = share(g.multi, g.withDiv); g.manP = share(g.nH, g.nG);
+  return g;
+}
+function summarize(core){
+  const cl = [...core.clients.values()];
+  const T = groupStats(cl);
+  let revFP = 0, ordFP = 0;
+  for (const o of core.orders.values()) if (o.fp) { revFP += o.n; ordFP++; }
+  const fp = groupStats(cl.filter(c => c.isFP)), nofp = groupStats(cl.filter(c => !c.isFP));
+  const segs = Object.fromEntries(SEGS.map(s => [s.k, groupStats(cl.filter(c => c.seg === s.k))]));
+  return {T, fp, nofp, segs, revFP, ordFP, pRevFP: share(revFP, T.n), pCliFP: share(fp.cl, T.cl)};
+}
+function divFP(core){
+  const m = {};
+  for (const r of core.lines) {
+    const d = r.a ? r.a.div : 'SIN DATO';
+    const o = m[d] || (m[d] = {n:0, nFP:0});
+    o.n += r.n; if (r.fp) o.nFP += r.n;
+  }
+  return m;
+}
+function secondPurchase(core){
+  const M = {ff:0, fd:0, df:0, dd:0};
+  for (const c of core.clients.values()) {
+    if (c.k < 2) continue;
+    const l = c.list.slice().sort((a, b) => (a.d || '').localeCompare(b.d || '') || a.id.localeCompare(b.id));
+    const a = l[0].fp, b = l[1].fp;
+    M[(a ? 'f' : 'd') + (b ? 'f' : 'd')]++;
+  }
+  M.f = M.ff + M.fd; M.d = M.df + M.dd;
+  return M;
+}
+function orderPatterns(core){
+  const p = {fp:{k:0, n:0, u:0}, d:{k:0, n:0, u:0}};
+  for (const o of core.orders.values()) { const t = o.fp ? p.fp : p.d; t.k++; t.n += o.n; t.u += o.u; }
+  for (const t of [p.fp, p.d]) { t.aov = share(t.n, t.k); t.upo = share(t.u, t.k); t.ppu = share(t.n, t.u); }
+  return p;
+}
+function dimKeyOf(r, dim){
+  if (dim === 'div') return r.a ? divLabel(r.a.div) : 'Sin dato';
+  if (dim === 'gender') return r.a ? r.a.gender : 'Sin dato';
+  if (dim === 'cat') return r.a ? r.a.cat : 'Sin dato';
+  if (dim === 'tipo') return r.a ? (r.a.tipo || 'Sin dato') : 'Sin dato';
+  return r.fr;
+}
+function computeMix(core, dim, filterFn){
+  const hasAttr = ATTR.size > 0;
+  const g = new Map(); let U = 0, N = 0, CF = 0, CN = 0;
+  for (const r of core.lines) {
+    if (dim === 'fr' && hasAttr && (!r.a || r.a.div !== 'FOOTWEAR')) continue;
+    if (filterFn && !filterFn(r)) continue;
+    const c = core.clients.get(r.e);
+    const k = dimKeyOf(r, dim);
+    let o = g.get(k); if (!o) { o = {label:k, u:0, n:0, nFP:0, cf:0, cn:0}; g.set(k, o); }
+    o.u += r.u; o.n += r.n; if (r.fp) o.nFP += r.n;
+    if (c && c.isFP) { o.cf += r.n; CF += r.n; } else { o.cn += r.n; CN += r.n; }
+    U += r.u; N += r.n;
+  }
+  const rows = [...g.values()].map(o => ({...o, pU:share(o.u, U), pN:share(o.n, N), pFP:share(o.nFP, o.n), sF:share(o.cf, CF), sN:share(o.cn, CN),
+    diff: (CF && CN) ? o.cf / CF - o.cn / CN : null}));
+  const nFP = rows.reduce((a, o) => a + o.nFP, 0);
+  return {rows, U, N, CF, CN, pFP:share(nFP, N)};
+}
+function granularity(from, to){
+  const span = (from && to) ? dayNum(to) - dayNum(from) + 1 : 0;
+  return span > 75 ? 'month' : span > 20 ? 'week' : 'day';
+}
+function bucketOf(d, gr){
+  if (gr === 'month') return d.slice(0, 7);
+  if (gr === 'week') { const n = dayNum(d); const wd = (new Date(n * 86400000).getUTCDay() + 6) % 7; return fromDay(n - wd); }
+  return d;
+}
+function bucketLabel(k, gr, multiYear){
+  if (gr === 'month') { const [y, m] = k.split('-'); return MONTH_SHORT[+m - 1] + (multiYear ? ' ' + y.slice(2) : ''); }
+  if (gr === 'week') return 'sem ' + dateLabel(k);
+  return dateLabel(k);
+}
+function seasonality(core){
+  const gr = granularity(core.from || BOUNDS.min, core.to || BOUNDS.max);
+  const m = new Map();
+  for (const o of core.orders.values()) {
+    if (!o.d) continue;
+    const k = bucketOf(o.d, gr);
+    const b = m.get(k) || {k, n:0, nFP:0, ord:0};
+    b.n += o.n; b.ord++; if (o.fp) b.nFP += o.n;
+    m.set(k, b);
+  }
+  const keys = [...m.keys()].sort();
+  const multiYear = keys.length && keys[0].slice(0, 4) !== keys[keys.length - 1].slice(0, 4);
+  return {gr, list: keys.map(k => ({...m.get(k), label:bucketLabel(k, gr, multiYear), p:share(m.get(k).nFP, m.get(k).n)}))};
+}
+function quantileCuts(vals){
+  const s = vals.slice().sort((a, b) => a - b), n = s.length;
+  return [0.2, 0.4, 0.6, 0.8].map(q => s[Math.min(n - 1, Math.floor(q * n))]);
+}
+function computeRFM(core){
+  const end = core.to || BOUNDS.max;
+  const cl = [...core.clients.values()].filter(c => c.last);
+  if (!cl.length) return {rows:[], cl:[]};
+  const endN = dayNum(end);
+  const rec = cl.map(c => endN - dayNum(c.last));
+  const rc = quantileCuts(rec), mc = quantileCuts(cl.map(c => c.n));
+  cl.forEach((c, i) => {
+    const r = rec[i];
+    c.R = 5 - rc.filter(t => r > t).length;
+    c.F = c.k >= 4 ? 5 : c.k === 3 ? 4 : c.k === 2 ? 3 : 1;
+    c.M = 1 + mc.filter(t => c.n > t).length;
+    let s;
+    if (c.R >= 4 && c.F >= 4 && c.M >= 4) s = 'Champions';
+    else if (c.R >= 3 && c.F >= 3) s = 'Leales';
+    else if (c.R >= 4 && c.F === 1 && c.M >= 4) s = 'Potenciales';
+    else if (c.R >= 4 && c.F === 1) s = 'Nuevos';
+    else if (c.R <= 2 && c.F >= 3) s = 'En riesgo';
+    else if (c.R === 3) s = 'Dormidos';
+    else s = 'Perdidos';
+    c.rfm = s;
+  });
+  const total = groupStats(cl);
+  const rows = RFM_SEGS.map(s => {
+    const list = cl.filter(c => c.rfm === s);
+    const g = groupStats(list);
+    const segN = Object.fromEntries(SEGS.map(x => [x.k, list.filter(c => c.seg === x.k).length]));
+    return {label:s, ...g, pCl:share(g.cl, total.cl), pN:share(g.n, total.n), segN,
+      pNunca:share(segN.nunca, g.cl), pFP:share(segN.puro + segN.predom, g.cl), pMid:share(segN.predom + segN.mixto, g.cl)};
+  }).filter(r => r.cl);
+  return {rows, total};
+}
+function computeOpp(core){
+  const cl = [...core.clients.values()].filter(c => c.n > 0);
+  if (!cl.length) return null;
+  const s = cl.map(c => c.n).sort((a, b) => b - a);
+  const thr = s[Math.max(0, Math.ceil(s.length * params.top / 100) - 1)];
+  const hs = cl.filter(c => c.n >= thr);
+  const opp = hs.filter(c => c.share < 0.2);
+  const oppSet = new Set(opp.map(c => c.e));
+  for (const c of core.clients.values()) { c.hs = c.n >= thr && c.n > 0; c.opp = oppSet.has(c.e); }
+  const T = groupStats(cl), O = groupStats(opp), H = groupStats(hs);
+  const mix = computeMix(core, 'fr');
+  // franquicias: oportunidad vs resto
+  const fr = new Map(); let NO = 0, NR = 0;
+  const hasAttr = ATTR.size > 0;
+  for (const r of core.lines) {
+    if (hasAttr && (!r.a || r.a.div !== 'FOOTWEAR')) continue;
+    const isO = oppSet.has(r.e);
+    const o = fr.get(r.fr) || {label:r.fr, o:0, r:0};
+    if (isO) { o.o += r.n; NO += r.n; } else { o.r += r.n; NR += r.n; }
+    fr.set(r.fr, o);
+  }
+  const frRows = [...fr.values()].map(o => ({...o, pO:share(o.o, NO), pR:share(o.r, NR), diff:(NO && NR) ? o.o / NO - o.r / NR : null}));
+  return {thr, T, O, H, opp, hs, frRows, nunca:share(opp.filter(c => c.seg === 'nunca').length, opp.length), mix};
+}
+function compute(){
+  const f = state.filters;
+  const from = f.from || BOUNDS.min, to = f.to || BOUNDS.max;
+  const core = computeCore(from, to);
+  const S = summarize(core);
+  const C = {core, S, from, to, span: (from && to) ? dayNum(to) - dayNum(from) + 1 : 0};
+  C.second = secondPurchase(core);
+  C.pat = orderPatterns(core);
+  C.sea = seasonality(core);
+  C.rfm = computeRFM(core);
+  C.opp = computeOpp(core);
+  C.mixCache = {};
+  C.mix = dim => C.mixCache[dim] || (C.mixCache[dim] = computeMix(core, dim));
+  C.attrCov = (() => { let n = 0, a = 0; for (const r of core.lines) { n += r.n; if (r.a) a += r.n; } return share(a, n); })();
+  C.ruleCmp = (() => {
+    if (!CATP.size) return null;
+    let n = 0, nFP = 0, nFPd = 0, nCat = 0;
+    const dOK = new Map();
+    for (const r of core.lines) { if (!r.fpD) dOK.set(r.o, false); if (r.full && r.pu != null) nCat += r.n; }
+    for (const o of core.orders.values()) { n += o.n; if (o.fp) nFP += o.n; if (dOK.get(o.id) !== false) nFPd += o.n; }
+    return {cat:share(nFP, n), desc:share(nFPd, n), cov:share(nCat, n)};
+  })();
+  C.ofImpact = (() => {
+    if (params.of || CATP.size) return null;
+    const oft = ofTerms(); if (!oft.length) return null;
+    let n = 0, nFP = 0, nFPof = 0;
+    for (const o of core.orders.values()) { n += o.n; if (o.fp) nFP += o.n; }
+    const ofOrders = new Set();
+    for (const r of core.lines) if (r.cn && oft.some(t => r.cn.includes(t))) ofOrders.add(r.o);
+    for (const o of core.orders.values()) if (o.fp && ofOrders.has(o.id)) nFPof += o.n;
+    return {now:share(nFP, n), alt:share(nFP - nFPof, n)};
+  })();
+  return C;
+}
+
+/* ---------- Render: archivos ---------- */
+function renderFileLists(){
+  for (const kind of ['sales', 'cat', 'stock']) {
+    const files = filesOf(kind);
+    const box = $('#slots-' + kind);
+    let h = '';
+    files.forEach((f, i) => {
+      let meta, warn = '';
+      if (kind === 'sales') {
+        meta = `${fmtInt(f.rows.length)} líneas, ${fmtInt(f.clients)} clientes` + (f.min ? `, ${dateLabel(f.min)} al ${dateLabel(f.max, true)}` : '');
+        if (f.excl) meta += `. Excluidas ${fmtInt(f.excl)} líneas (${fmtInt(f.exclOrders.size)} pedidos) canceladas o pendientes`;
+        if (f.bags) meta += `. ${fmtInt(f.bags)} líneas de bolsas fuera`;
+        if (!f.hasStatus) warn = 'Sin columna de estado: no se pudieron excluir cancelados ni pagos pendientes';
+      } else if (kind === 'cat') {
+        meta = `${fmtInt(f.scCount)} productos con precio full` + (f.offerN ? `, ${fmtInt(f.offerN)} hoy con precio oferta` : '');
+      } else {
+        meta = `${fmtInt(f.scCount)} productos`;
+      }
+      h += `<div class="slot"><span class="n">${i + 1}</span><span class="f"><span class="fn" title="${esc(f.name)}">${esc(f.name)}</span>`
+        + `<span class="fm">${esc(meta)}</span>${warn ? `<span class="fm warn">${esc(warn)}</span>` : ''}</span>`
+        + `<button type="button" class="btn ghost" data-rm="${kind}:${i}" aria-label="Quitar ${esc(f.name)}">Quitar</button></div>`;
+    });
+    if (files.length < MAXF[kind]) h += `<div class="slot free" role="button" tabindex="0" data-pick="${kind}"><span class="n">${files.length + 1}</span><span class="f">Arrastra aquí o elige un archivo</span><span class="btn">Elegir archivos</span></div>`;
+    box.innerHTML = h;
+    $('#count-' + kind).textContent = `${files.length} de ${MAXF[kind]} archivos`;
+  }
+}
+
+/* ---------- Render: componentes ---------- */
+function kpi(label, color, value, rows){
+  return `<div class="card kpi"><div class="kpi-main"><span class="kpi-label">${color ? `<i style="background:${color}"></i>` : ''}${label}</span><span class="kpi-val">${value}</span></div>`
+    + rows.map(([l, v]) => `<div class="kpi-row"><span>${l}</span><span>${v}</span></div>`).join('') + '</div>';
+}
+function mixBar(parts){
+  const tot = parts.reduce((a, p) => a + (p.v || 0), 0);
+  if (!tot) return '<span class="muted">—</span>';
+  const label = parts.filter(p => p.v > 0).map(p => `${p.l} ${pct(p.v / tot)}`).join(', ');
+  return `<div class="mix" role="img" aria-label="${esc(label)}" title="${esc(label)}">` + parts.filter(p => p.v > 0).map(p =>
+    `<span style="width:${(p.v / tot * 100).toFixed(3)}%;background:${p.c}"></span>`).join('') + '</div>';
+}
+const segMix = segN => mixBar(SEGS.map(s => ({l:s.short, v:segN[s.k], c:SEG_COLOR[s.k]})));
+const badge = k => `<span class="badge"><i style="background:${SEG_COLOR[k]}"></i>${SEG[k].label}</span>`;
+const diffCls = x => x == null ? '' : x > 0.0005 ? 'up' : x < -0.0005 ? 'down' : '';
+function renderTable(id, el, cols, rows, opts = {}){
+  const t = state.tables[id] || (state.tables[id] = {sort:opts.sort, dir:opts.dir ?? -1, page:0, user:false});
+  if (!t.user && t.sort !== opts.sort) { t.sort = opts.sort; t.dir = opts.dir ?? -1; }
+  const size = opts.pageSize || 15;
+  const sorted = rows.slice();
+  const sc = cols.find(c => c.key === t.sort);
+  if (sc && !opts.fixed) {
+    const get = sc.sortVal || (r => r[sc.key]);
+    sorted.sort((a, b) => {
+      const va = get(a), vb = get(b);
+      if (va == null && vb == null) return 0;
+      if (va == null) return 1;
+      if (vb == null) return -1;
+      return (typeof va === 'string' ? va.localeCompare(vb, 'es') : (va === vb ? 0 : va > vb ? 1 : -1)) * t.dir;
+    });
+  }
+  const pages = Math.max(1, Math.ceil(sorted.length / size));
+  if (t.page >= pages) t.page = pages - 1;
+  const slice = sorted.slice(t.page * size, t.page * size + size);
+  let h = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th class="idx" scope="col"><span class="sr">Fila</span></th>';
+  for (const c of cols) {
+    const act = t.sort === c.key && !opts.fixed;
+    const attrs = (c.nosort || opts.fixed) ? '' : ` data-k="${c.key}" tabindex="0" aria-sort="${act ? (t.dir > 0 ? 'ascending' : 'descending') : 'none'}"`;
+    h += `<th scope="col" class="${c.num ? 'num' : ''}"${attrs}${c.tip ? ` title="${esc(c.tip)}"` : ''}>${c.label}${act ? `<span class="arrow" aria-hidden="true">${t.dir > 0 ? '▴' : '▾'}</span>` : ''}</th>`;
+  }
+  h += '</tr></thead><tbody>';
+  slice.forEach((r, i) => {
+    h += `<tr><td class="idx">${t.page * size + i + 1}.</td>`;
+    for (const c of cols) h += `<td class="${c.num ? 'num' : ''}">${c.render ? c.render(r) : esc(r[c.key])}</td>`;
+    h += '</tr>';
+  });
+  if (!slice.length) h += `<tr><td class="empty-row" colspan="${cols.length + 1}">${opts.empty || 'Sin datos para el período elegido.'}</td></tr>`;
+  h += '</tbody>';
+  if (opts.footer && slice.length) h += `<tfoot><tr><td class="idx"></td>${opts.footer.map((v, i) => `<td class="${cols[i].num ? 'num' : ''}">${v}</td>`).join('')}</tr></tfoot>`;
+  h += '</table></div>';
+  if (pages > 1) h += `<div class="pager"><span>${fmtInt(t.page * size + 1)} - ${fmtInt(Math.min(sorted.length, (t.page + 1) * size))} / ${fmtInt(sorted.length)}</span><button type="button" data-pg="-1" ${t.page === 0 ? 'disabled' : ''} aria-label="Página anterior">‹</button><button type="button" data-pg="1" ${t.page >= pages - 1 ? 'disabled' : ''} aria-label="Página siguiente">›</button></div>`;
+  el.innerHTML = h;
+  const again = () => renderTable(id, el, cols, rows, opts);
+  el.querySelectorAll('th[data-k]').forEach(thEl => {
+    const go = () => { const k = thEl.dataset.k; if (t.sort === k) t.dir *= -1; else { t.sort = k; t.dir = cols.find(c => c.key === k).num ? -1 : 1; } t.user = true; t.page = 0; again(); };
+    thEl.addEventListener('click', go);
+    thEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
+  el.querySelectorAll('[data-pg]').forEach(b => b.addEventListener('click', () => { t.page += +b.dataset.pg; again(); }));
+}
+
+/* ---------- Gráficos ---------- */
+const PAL_VAR = {muted:'var(--muted)', grid:'var(--line-soft)', base:'var(--line)', s1:'var(--s1)', s2:'var(--s2)', s3:'var(--s3)', fp:'var(--fp)', nofp:'var(--nofp)',
+  hi:'var(--g3)', mid:'var(--g1)', lo:'var(--g5)', puro:'var(--g1)', predom:'var(--g2)', mixto:'var(--g3)', promo:'var(--g4)', nunca:'var(--g5)'};
+const PAL_LIGHT = {muted:'#5f6368', grid:'#eceff1', base:'#dadce0', s1:'#c6dafc', s2:'#7baaf7', s3:'#1a73e8', fp:'#1a73e8', nofp:'#f29900',
+  hi:'#34a853', mid:'#4285f4', lo:'#ea4335', puro:'#4285f4', predom:'#12b5cb', mixto:'#34a853', promo:'#fbbc04', nunca:'#ea4335'};
+function niceMax(v){
+  if (!(v > 0)) return 1;
+  const raw = v / 4, e = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / e;
+  return [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(x => f <= x + 1e-9) * e * 4;
+}
+const legendHTML = (items, pal) => items.map(([k, l]) => `<span><i style="background:${pal[k]}"></i>${esc(l)}</span>`).join('');
+const svgText = (pal, x, y, anchor, txt, size, weight) => `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" style="fill:${pal.muted};font:${weight || 400} ${size || 10.5}px Roboto,Arial,sans-serif">${txt}</text>`;
+function svgGrid(pal, m, W, ih, labelFn){
+  let s = '';
+  for (let i = 0; i <= 4; i++) {
+    const y = m.t + ih - ih * i / 4;
+    s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:${i ? pal.grid : pal.base};stroke-width:1"/>`;
+    s += svgText(pal, m.l - 6, y + 3.5, 'end', labelFn(i));
+  }
+  return s;
+}
+function svgGrouped(groups, W, H, keys, names, pal, aria, pctAxis = true){
+  const m = {t:22, r:6, b:28, l:40}, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const vals = groups.flatMap(g => g.vals).filter(v => v != null);
+  const max = pctAxis ? Math.min(1, niceMax(Math.max(0.01, ...vals))) : niceMax(Math.max(...vals, 1));
+  const gw = iw / groups.length, n = keys.length, gap = 2;
+  const bw = Math.max(3, Math.min(34, (gw * 0.78 - gap * (n - 1)) / n));
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(aria)}">`;
+  s += svgGrid(pal, m, W, ih, i => pctAxis ? nf0.format(max * i / 4 * 100) + ' %' : fmtCompact(max * i / 4));
+  groups.forEach((g, gi) => {
+    const x0 = m.l + gw * gi + (gw - (n * bw + (n - 1) * gap)) / 2;
+    g.vals.forEach((v, si) => {
+      if (v == null) return;
+      const h = ih * v / max, x = x0 + si * (bw + gap), y = m.t + ih - h;
+      s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" style="fill:${pal[keys[si]]}"><title>${esc(g.label)}, ${names[si]}: ${pctAxis ? pct(v) : fmtInt(v)}</title></rect>`;
+      if (bw >= 17) s += svgText(pal, x + bw / 2, y - 4, 'middle', pctAxis ? pct0(v) : fmtCompact(v), 10);
+    });
+    s += svgText(pal, m.l + gw * gi + gw / 2, H - m.b + 16, 'middle', esc(g.label));
+  });
+  return s + '</svg>';
+}
+function svgSeason(list, W, H, pal, avg){
+  const m = {t:24, r:6, b:28, l:40}, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const max = Math.min(1, niceMax(Math.max(0.05, ...list.map(b => b.p || 0))));
+  const bw = iw / list.length, barW = Math.max(3, Math.min(64, bw * 0.78));
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="% de revenue Full Price por período">`;
+  s += svgGrid(pal, m, W, ih, i => nf0.format(max * i / 4 * 100) + ' %');
+  const every = Math.max(1, Math.ceil(list.length / Math.max(1, Math.floor(iw / 44))));
+  list.forEach((b, i) => {
+    const v = b.p || 0, h = ih * v / max, x = m.l + bw * i + (bw - barW) / 2, y = m.t + ih - h;
+    const col = avg != null && v >= avg + 0.05 ? pal.hi : avg != null && v <= avg - 0.05 ? pal.lo : pal.mid;
+    s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" style="fill:${col}"><title>${esc(b.label)}: ${pct(v)} Full Price, revenue ${esc(fmtMoney(b.n))}</title></rect>`;
+    if (barW >= 16) s += svgText(pal, x + barW / 2, y - 5, 'middle', nf0.format(v * 100), 10.5, 500);
+    if (i % every === 0) s += svgText(pal, x + barW / 2, H - m.b + 16, 'middle', esc(b.label));
+  });
+  if (avg != null) { const y = m.t + ih - ih * avg / max; s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:${pal.muted};stroke-width:1;stroke-dasharray:4 3"/>`; }
+  return s + '</svg>';
+}
+
+/* ---------- Render: análisis ---------- */
+function renderKpis(C){
+  const {T, fp, nofp, pCliFP, pRevFP} = C.S;
+  const d = (a, b) => b ? a / b - 1 : null;
+  $('#kpis').innerHTML =
+    kpi('Clientes', '', fmtInt(T.cl), [['Pedidos', fmtInt(T.k)], ['Pedidos/cliente', T.freq == null ? '—' : nf2.format(T.freq)]])
+    + kpi('Clientes Full Price', 'var(--fp)', pct(pCliFP), [['N° clientes', fmtInt(fp.cl)], ['% del revenue', pct(pRevFP)]])
+    + kpi('Revenue neto', '', money(T.n), [['Ticket prom.', fmtMoney(T.aov)], ['Revenue/cliente', fmtMoney(T.rpc)]])
+    + kpi('Ticket FP', 'var(--fp)', fmtMoney(fp.aov), [['No FP', fmtMoney(nofp.aov)], ['Diferencia', `<span class="${diffCls(d(fp.aov, nofp.aov))}">${varPct(d(fp.aov, nofp.aov))}</span>`]])
+    + kpi('Revenue/cliente FP', 'var(--fp)', fmtMoney(fp.rpc), [['No FP', fmtMoney(nofp.rpc)], ['Diferencia', `<span class="${diffCls(d(fp.rpc, nofp.rpc))}">${varPct(d(fp.rpc, nofp.rpc))}</span>`]])
+    + kpi('Frecuencia FP', 'var(--fp)', fp.freq == null ? '—' : nf2.format(fp.freq), [['No FP', nofp.freq == null ? '—' : nf2.format(nofp.freq)], ['Diferencia', `<span class="${diffCls(d(fp.freq, nofp.freq))}">${varPct(d(fp.freq, nofp.freq))}</span>`]]);
+}
+function segRows(C){
+  const T = C.S.T;
+  return SEGS.map(s => { const g = C.S.segs[s.k]; return {...g, key:s.k, label:s.label, range:s.range, pCl:share(g.cl, T.cl), pN:share(g.n, T.n)}; });
+}
+function renderSegTable(C){
+  const T = C.S.T;
+  const f2 = v => v == null ? '—' : nf2.format(v);
+  const cols = [
+    {key:'label', label:'Segmento', render:r => badge(r.key)},
+    {key:'range', label:'% revenue sin dcto'},
+    {key:'cl', label:'Clientes', num:true, render:r => fmtInt(r.cl)},
+    {key:'pCl', label:'% clientes', num:true, render:r => pct(r.pCl)},
+    {key:'n', label:'Revenue', num:true, render:r => money(r.n)},
+    {key:'pN', label:'% revenue', num:true, render:r => pct(r.pN)},
+    {key:'freq', label:'Pedidos/cliente', num:true, render:r => f2(r.freq)},
+    {key:'aov', label:'Ticket prom.', num:true, render:r => fmtMoney(r.aov)},
+    {key:'rpc', label:'Revenue/cliente', num:true, render:r => fmtMoney(r.rpc)},
+    {key:'ppu', label:'Precio/unidad', num:true, render:r => fmtMoney(r.ppu)},
+    {key:'multiP', label:'2+ divisiones', num:true, render:r => pct(r.multiP)},
+    {key:'manP', label:'% gasto hombre', num:true, render:r => pct(r.manP)}
+  ];
+  const footer = ['Total', '', fmtInt(T.cl), pct(1), money(T.n), pct(1), f2(T.freq), fmtMoney(T.aov), fmtMoney(T.rpc), fmtMoney(T.ppu), pct(T.multiP), pct(T.manP)];
+  renderTable('seg', $('#t-seg'), cols, segRows(C), {fixed:true, footer});
+}
+function secondHTML(C, compact){
+  const M = C.second;
+  if (!M.f && !M.d) return `<p class="${compact ? 'sl-empty' : 'chart-empty'}">Ningún cliente tiene dos pedidos en el período. Carga más meses de venta.</p>`;
+  const cell = (a, t) => `<b>${pct(share(a, t))}</b><span class="sub">${fmtInt(a)} clientes</span>`;
+  return `<div class="hl"><div><b>${pct(share(M.fd, M.f))}</b><span>de quienes compraron Full Price la 1ª vez recibe descuento en la 2ª</span></div>`
+    + `<div><b>${pct(share(M.dd, M.d))}</b><span>de quienes entraron con descuento sigue con descuento en la 2ª</span></div></div>`
+    + `<div class="tbl-wrap"><table class="mtx"><thead><tr><th>1ª compra</th><th>2ª Full Price</th><th>2ª con descuento</th><th>Clientes</th></tr></thead><tbody>`
+    + `<tr><td>Full Price</td><td>${cell(M.ff, M.f)}</td><td>${cell(M.fd, M.f)}</td><td>${fmtInt(M.f)}</td></tr>`
+    + `<tr><td>Con descuento</td><td>${cell(M.df, M.d)}</td><td>${cell(M.dd, M.d)}</td><td>${fmtInt(M.d)}</td></tr>`
+    + `</tbody></table></div><p class="cnote">Clientes con dos o más pedidos en el período: ${fmtInt(M.f + M.d)} de ${fmtInt(C.S.T.cl)} (${pct(share(M.f + M.d, C.S.T.cl))}).</p>`;
+}
+function patternsHTML(C){
+  const p = C.pat;
+  const d = (a, b) => b ? a / b - 1 : null;
+  const row = (l, a, b, f) => `<tr><td>${l}</td><td>${f(a)}</td><td>${f(b)}</td><td>${varPct(d(b, a))}</td></tr>`;
+  return `<div class="tbl-wrap"><table class="mtx"><thead><tr><th>Métrica</th><th>Pedido Full Price</th><th>Pedido con descuento</th><th>Dcto vs FP</th></tr></thead><tbody>`
+    + row('Pedidos', p.fp.k, p.d.k, fmtInt)
+    + row('Revenue', p.fp.n, p.d.n, money)
+    + row('Ticket promedio', p.fp.aov, p.d.aov, fmtMoney)
+    + row('Unidades por pedido', p.fp.upo, p.d.upo, v => v == null ? '—' : nf2.format(v))
+    + row('Precio por unidad', p.fp.ppu, p.d.ppu, fmtMoney)
+    + `</tbody></table></div><p class="cnote">% de pedidos Full Price: <b>${pct(share(p.fp.k, p.fp.k + p.d.k))}</b>. Precio por unidad: revenue neto dividido por unidades.</p>`;
+}
+const DIM_LABEL = {div:'División', gender:'Género', tipo:'Tipo de producto', cat:'Disciplina', fr:'Franquicia'};
+function renderMix(C){
+  const X = C.mix(state.dim);
+  const cols = [
+    {key:'label', label:DIM_LABEL[state.dim]},
+    {key:'u', label:'Unidades', num:true, render:r => fmtInt(r.u)},
+    {key:'pU', label:'% unidades', num:true, render:r => pct(r.pU)},
+    {key:'n', label:'Revenue', num:true, render:r => fmtMoney(r.n)},
+    {key:'pN', label:'% revenue', num:true, render:r => pct(r.pN)},
+    {key:'pFP', label:'% Full Price', num:true, render:r => pct(r.pFP), tip:'Parte del revenue de este grupo vendida sin descuento'},
+    {key:'sF', label:'Gasto clientes FP', num:true, render:r => pct(r.sF), tip:'Cómo se reparte el gasto de los clientes Full Price'},
+    {key:'sN', label:'Gasto No FP', num:true, render:r => pct(r.sN)},
+    {key:'diff', label:'Sobre-índice FP', num:true, render:r => `<span class="${diffCls(r.diff)}">${pp(r.diff)}</span>`, tip:'Diferencia entre el peso en el gasto de clientes FP y No FP'}
+  ];
+  const footer = ['Total', fmtInt(X.U), pct(1), fmtMoney(X.N), pct(1), pct(X.pFP), pct(1), pct(1), ''];
+  renderTable('mix-' + state.dim, $('#t-mix'), cols, X.rows, {sort:'n', dir:-1, pageSize:15, footer});
+  const notes = [];
+  if (state.dim === 'fr') notes.push(ATTR.size ? 'Franquicias medidas sobre el gasto en calzado (según el stock cargado).' : 'Sin stock cargado, las franquicias se miden sobre todo el gasto.');
+  if (state.dim !== 'fr' && !ATTR.size) notes.push('Carga el catálogo VTEX o el stock por SKU para ver división, género, tipo de producto y disciplina.');
+  if (state.dim === 'tipo' && !CATP.size) notes.push('El tipo de producto viene del catálogo VTEX.');
+  else if (C.attrCov != null && C.attrCov < 0.95 && state.dim !== 'fr') notes.push(`El ${pct(C.attrCov)} del revenue tiene datos de producto en el stock cargado; el resto aparece como Sin dato.`);
+  notes.push(`% Full Price: por línea, ${CATP.size ? 'pagada al precio full del catálogo' : 'sin descuento'}. Sobre-índice:`);
+  notes.push('cuánto más pesa el grupo en el gasto de los clientes Full Price que en el de los No Full Price.');
+  $('#mix-note').textContent = notes.join(' ');
+}
+function renderSeason(C){
+  const el = $('#c-sea');
+  const avg = C.S.pRevFP;
+  const lab = {month:'mes', week:'semana', day:'día'}[C.sea.gr];
+  $('#lg-sea').innerHTML = legendHTML([['hi', '5 pp o más sobre el promedio'], ['mid', 'Cerca del promedio'], ['lo', '5 pp o más bajo el promedio']], PAL_VAR);
+  if (!C.sea.list.length) { el.innerHTML = '<p class="chart-empty">Sin pedidos con fecha.</p>'; return; }
+  el.innerHTML = svgSeason(C.sea.list, Math.max(320, Math.floor(el.clientWidth || 900)), 260, PAL_VAR, avg);
+  const s = C.sea.list.filter(b => b.n > 0);
+  const lo = s.slice().sort((a, b) => a.p - b.p)[0], hi = s.slice().sort((a, b) => b.p - a.p)[0];
+  $('#sea-note').innerHTML = `Por ${lab}. Línea punteada: promedio del período (${pct(avg)}).` + (s.length > 2 ? ` Más bajo: <b>${esc(lo.label)}</b> (${pct(lo.p)}). Más alto: <b>${esc(hi.label)}</b> (${pct(hi.p)}).` : '');
+}
+function cmpDefaults(){
+  const max = BOUNDS.max, min = BOUNDS.min;
+  if (!max) return null;
+  const to = state.filters.to || max, from = state.filters.from || min;
+  const minPlus = shiftYear(min, 1);
+  if (minPlus <= to) { const b1 = from > minPlus ? from : minPlus; return {a1:shiftYear(b1, -1), a2:shiftYear(to, -1), b1, b2:to}; }
+  const len = dayNum(to) - dayNum(from) + 1, half = Math.floor(len / 2);
+  if (len < 2) return {a1:from, a2:to, b1:from, b2:to};
+  return {a1:from, a2:fromDay(dayNum(from) + half - 1), b1:fromDay(dayNum(from) + half), b2:to};
+}
+function cmpData(){
+  const P = state.cmp || (state.cmp = cmpDefaults());
+  if (!P) return null;
+  const A = computeCore(P.a1, P.a2), B = computeCore(P.b1, P.b2);
+  const SA = summarize(A), SB = summarize(B), DA = divFP(A), DB = divFP(B);
+  const rows = [
+    {l:'Clientes', a:SA.T.cl, b:SB.T.cl, f:fmtInt, t:'pct'},
+    {l:'Pedidos', a:SA.T.k, b:SB.T.k, f:fmtInt, t:'pct'},
+    {l:'Revenue neto', a:SA.T.n, b:SB.T.n, f:money, t:'pct'},
+    {l:'Ticket promedio', a:SA.T.aov, b:SB.T.aov, f:fmtMoney, t:'pct'},
+    {l:'Pedidos/cliente', a:SA.T.freq, b:SB.T.freq, f:v => v == null ? '—' : nf2.format(v), t:'pct'},
+    {l:'% clientes Full Price', a:SA.pCliFP, b:SB.pCliFP, f:pct, t:'pp'},
+    {l:'% revenue Full Price', a:SA.pRevFP, b:SB.pRevFP, f:pct, t:'pp'}
+  ];
+  for (const d of DIV_ORDER) if ((DA[d] && DA[d].n) || (DB[d] && DB[d].n)) rows.push({l:`% Full Price ${divLabel(d)}`, a:DA[d] ? share(DA[d].nFP, DA[d].n) : null, b:DB[d] ? share(DB[d].nFP, DB[d].n) : null, f:pct, t:'pp'});
+  for (const r of rows) r.v = r.a == null || r.b == null ? null : r.t === 'pp' ? r.b - r.a : (r.a ? r.b / r.a - 1 : null);
+  return {P, rows};
+}
+function renderCmp(){
+  const D = cmpData();
+  if (!D) { $('#t-cmp').innerHTML = ''; return; }
+  const {P, rows} = D;
+  $('#cmp-a1').value = P.a1; $('#cmp-a2').value = P.a2; $('#cmp-b1').value = P.b1; $('#cmp-b2').value = P.b2;
+  for (const id of ['#cmp-a1', '#cmp-a2', '#cmp-b1', '#cmp-b2']) { $(id).min = BOUNDS.min; $(id).max = BOUNDS.max; }
+  const cols = [
+    {key:'l', label:'Métrica'},
+    {key:'a', label:`A: ${dateLabel(P.a1)} al ${dateLabel(P.a2, true)}`, num:true, render:r => r.f(r.a)},
+    {key:'b', label:`B: ${dateLabel(P.b1)} al ${dateLabel(P.b2, true)}`, num:true, render:r => `<b>${r.f(r.b)}</b>`},
+    {key:'v', label:'Variación', num:true, render:r => `<span class="${diffCls(r.v)}">${r.t === 'pp' ? pp(r.v) : varPct(r.v)}</span>`}
+  ];
+  renderTable('cmp', $('#t-cmp'), cols, rows, {fixed:true, pageSize:30});
+  const sameYear = P.b1.slice(0, 4) !== P.a1.slice(0, 4) && P.b1.slice(5) === P.a1.slice(5);
+  $('#cmp-note').textContent = (sameYear ? 'Comparación interanual con la misma ventana de fechas. ' : 'Sin datos del año anterior, se compara la primera mitad del período con la segunda. ')
+    + 'Puedes cambiar las fechas de cada período. % Full Price por división: por línea, sin descuento.';
+}
+function renderRFM(C){
+  const R = C.rfm;
+  if (!R.rows.length) { $('#t-rfm').innerHTML = '<p class="placeholder">Sin clientes con fecha.</p>'; return; }
+  const cols = [
+    {key:'label', label:'Segmento RFM'},
+    {key:'cl', label:'Clientes', num:true, render:r => fmtInt(r.cl)},
+    {key:'pCl', label:'% clientes', num:true, render:r => pct(r.pCl)},
+    {key:'n', label:'Revenue', num:true, render:r => fmtMoney(r.n)},
+    {key:'pN', label:'% revenue', num:true, render:r => pct(r.pN)},
+    {key:'freq', label:'Pedidos/cliente', num:true, render:r => r.freq == null ? '—' : nf2.format(r.freq)},
+    {key:'aov', label:'Ticket prom.', num:true, render:r => fmtMoney(r.aov)},
+    {key:'pFP', label:'% Full Price (≥ 50 %)', num:true, render:r => pct(r.pFP)},
+    {key:'pMid', label:'% Predom./Mixto', num:true, render:r => pct(r.pMid)},
+    {key:'pNunca', label:'% nunca FP', num:true, render:r => `<span class="${r.pNunca > 0.6 ? 'down' : ''}">${pct(r.pNunca)}</span>`},
+    {key:'mix', label:'Mezcla Full Price', nosort:true, render:r => segMix(r.segN)}
+  ];
+  renderTable('rfm', $('#t-rfm'), cols, R.rows, {fixed:true, pageSize:10});
+  $('#rfm-note').textContent = (C.span < 90 ? `Con ${fmtInt(C.span)} días de venta el RFM es poco representativo: carga al menos 3 meses. ` : '')
+    + 'R: recencia en quintiles (5 = más reciente); F: 1 pedido = 1, 2 = 3, 3 = 4, 4 o más = 5; M: revenue en quintiles. La mezcla muestra los 5 segmentos Full Price dentro de cada grupo.';
+}
+function renderOpp(C){
+  const O = C.opp;
+  if (!O) { $('#opp-kpis').innerHTML = ''; $('#t-opp').innerHTML = ''; return; }
+  $('#opp-kpis').innerHTML =
+    kpi('Clientes oportunidad', 'var(--g4)', fmtInt(O.O.cl), [['% de la base', pct(share(O.O.cl, O.T.cl))], ['Alto gasto total', fmtInt(O.H.cl)]])
+    + kpi('Revenue oportunidad', '', money(O.O.n), [['% del revenue', pct(share(O.O.n, O.T.n))], ['Revenue/cliente', fmtMoney(O.O.rpc)]])
+    + kpi('Nunca compró FP', 'var(--g5)', pct(O.nunca), [['Pedidos/cliente', O.O.freq == null ? '—' : nf2.format(O.O.freq)], ['Ticket prom.', fmtMoney(O.O.aov)]])
+    + kpi('Umbral alto gasto', '', fmtMoney(O.thr), [['Top de clientes', params.top + ' %'], ['FP del alto gasto', pct(share(O.H.cl - O.O.cl, O.H.cl))]]);
+  const cols = [
+    {key:'label', label:'Franquicia'},
+    {key:'pO', label:'Oportunidad', num:true, render:r => pct(r.pO)},
+    {key:'pR', label:'Resto de la base', num:true, render:r => pct(r.pR)},
+    {key:'diff', label:'Diferencia', num:true, render:r => `<span class="${diffCls(r.diff)}">${pp(r.diff)}</span>`}
+  ];
+  renderTable('opp', $('#t-opp'), cols, O.frRows.filter(r => r.label !== 'Otras'), {sort:'pO', dir:-1, pageSize:12});
+  $('#opp-note').textContent = `Oportunidad: clientes en el top ${params.top} % por revenue (desde ${fmtMoney(O.thr)}) con menos de 20 % de su revenue a precio full. La tabla compara su mix de franquicias${ATTR.size ? ' de calzado' : ''} con el resto de la base: lo que ya prefieren es por donde conviene ofrecerles precio full.`;
+}
+function expOptions(C){
+  const opts = [{v:'oportunidad', l:'Oportunidad (alto gasto con descuento)', f:c => c.opp}];
+  for (const s of SEGS) opts.push({v:'seg-' + s.k, l:s.label, f:c => c.seg === s.k});
+  for (const r of RFM_SEGS) opts.push({v:'rfm-' + r, l:'RFM: ' + r, f:c => c.rfm === r});
+  opts.push({v:'fp2d', l:'1ª compra FP y 2ª con descuento', f:c => { if (c.k < 2) return false; const l = c.list.slice().sort((a, b) => (a.d || '').localeCompare(b.d || '') || a.id.localeCompare(b.id)); return l[0].fp && !l[1].fp; }});
+  opts.push({v:'todos', l:'Todos los clientes', f:() => true});
+  return opts;
+}
+function renderExport(C){
+  const opts = expOptions(C);
+  const sel = $('#exp-seg');
+  sel.innerHTML = opts.map(o => `<option value="${esc(o.v)}">${esc(o.l)}</option>`).join('');
+  if (!opts.some(o => o.v === state.expSeg)) state.expSeg = 'oportunidad';
+  sel.value = state.expSeg;
+  const o = opts.find(x => x.v === state.expSeg);
+  const list = [...C.core.clients.values()].filter(o.f).sort((a, b) => b.n - a.n);
+  const cols = [
+    {key:'e', label:'Cliente', render:r => esc(maskEmail(r.e))},
+    {key:'seg', label:'Segmento FP', render:r => badge(r.seg)},
+    {key:'rfm', label:'RFM'},
+    {key:'k', label:'Pedidos', num:true, render:r => fmtInt(r.k)},
+    {key:'n', label:'Revenue', num:true, render:r => fmtMoney(r.n)},
+    {key:'share', label:'% revenue FP', num:true, render:r => pct(r.share)},
+    {key:'last', label:'Última compra', render:r => dateLabel(r.last, true)}
+  ];
+  renderTable('exp', $('#t-exp'), cols, list, {sort:'n', dir:-1, pageSize:10, empty:'Ningún cliente en este segmento.'});
+  $('#exp-btn').hidden = !canExport();
+  $('#exp-btn').disabled = !list.length;
+  $('#exp-btn').textContent = `Descargar lista (${fmtInt(list.length)} clientes)`;
+}
+
+/* ---------- Lecturas clave ---------- */
+function insightItems(C){
+  const {T, fp, nofp, pCliFP, pRevFP, segs} = C.S;
+  const items = [];
+  const add = (prio, color, html) => items.push({prio, color, html});
+  if (!T.cl) return items;
+  add(0, 'var(--fp)', `<b>${pct(pCliFP)}</b> de los clientes son Full Price (${fmtInt(fp.cl)} de ${fmtInt(T.cl)}) y explican el <b>${pct(pRevFP)}</b> del revenue.`);
+  const dA = share(fp.aov, nofp.aov) - 1, dF = share(fp.freq, nofp.freq) - 1;
+  if (isFinite(dA) && isFinite(dF)) {
+    const where = Math.abs(dA) > Math.abs(dF) + 0.05 ? 'en el ticket, no en la frecuencia' : Math.abs(dF) > Math.abs(dA) + 0.05 ? 'en la frecuencia, no en el ticket' : 'tanto en ticket como en frecuencia';
+    add(1, 'var(--fp)', `El cliente Full Price tiene ticket <b>${varPct(dA)}</b> y frecuencia <b>${varPct(dF)}</b> frente al No Full Price: la diferencia de valor está ${where}.`);
+  }
+  const big = SEGS.slice().sort((a, b) => segs[b.k].cl - segs[a.k].cl)[0];
+  const freq = SEGS.filter(s => segs[s.k].cl >= 20).sort((a, b) => segs[b.k].freq - segs[a.k].freq)[0];
+  if (big && freq && big.k !== freq.k) add(2, SEG_COLOR[freq.k], `El segmento más numeroso es <b>${big.label}</b> (${pct(share(segs[big.k].cl, T.cl))} de los clientes, ${nf2.format(segs[big.k].freq || 0)} pedidos/cliente). El más frecuente es <b>${freq.label}</b> con ${nf2.format(segs[freq.k].freq || 0)} pedidos/cliente.`);
+  const M = C.second;
+  if (M.f >= 20) add(1, 'var(--g5)', `De quienes compraron Full Price la 1ª vez, <b>${pct(share(M.fd, M.f))}</b> recibió descuento en la 2ª. De quienes entraron con descuento, <b>${pct(share(M.dd, M.d))}</b> siguió con descuento.`);
+  const p = C.pat;
+  if (p.fp.k && p.d.k) {
+    const du = share(p.d.upo, p.fp.upo) - 1;
+    if (isFinite(du) && Math.abs(du) > 0.05) add(3, 'var(--nofp)', `Los pedidos con descuento llevan <b>${varPct(du)}</b> unidades que los Full Price (${nf2.format(p.d.upo)} vs ${nf2.format(p.fp.upo)}).`);
+  }
+  if (ATTR.size) {
+    const dv = C.mix('div').rows.filter(r => r.label !== 'Sin dato' && r.pN > 0.02).sort((a, b) => a.pFP - b.pFP);
+    if (dv.length > 1) add(2, 'var(--g5)', `<b>${esc(dv[0].label)}</b> es la división con menos venta a precio full (${pct(dv[0].pFP)}), frente a ${pct(dv[dv.length - 1].pFP)} en ${esc(dv[dv.length - 1].label)}.`);
+  }
+  if (CATP.size) {
+    const tp = C.mix('tipo').rows.filter(r => r.label !== 'Sin dato' && r.pN > 0.02).sort((a, b) => a.pFP - b.pFP);
+    if (tp.length > 2) add(2, 'var(--g5)', `Por tipo de producto, <b>${esc(tp[tp.length - 1].label)}</b> es lo que más se vende a precio full (${pct(tp[tp.length - 1].pFP)}) y <b>${esc(tp[0].label)}</b> lo que menos (${pct(tp[0].pFP)}).`);
+  }
+  const fr = C.mix('fr').rows.filter(r => r.label !== 'Otras' && r.pN > 0.02 && r.diff != null).sort((a, b) => b.diff - a.diff);
+  if (fr.length && fr[0].diff > 0.01) add(3, 'var(--fp)', `<b>${esc(fr[0].label)}</b> es la franquicia que más sobre-indexa en clientes Full Price: ${pct(fr[0].sF)} de su gasto vs ${pct(fr[0].sN)} en No Full Price.`);
+  const O = C.opp;
+  if (O && O.O.cl) add(1, 'var(--g4)', `<b>${fmtInt(O.O.cl)}</b> clientes de alto gasto (${pct(share(O.O.cl, O.T.cl))} de la base) compran casi solo con descuento y suman el <b>${pct(share(O.O.n, O.T.n))}</b> del revenue. ${pct(O.nunca)} nunca compró Full Price.`);
+  if (C.sea.list.length > 2) {
+    const s = C.sea.list.filter(b => b.n > 0).sort((a, b) => a.p - b.p);
+    add(3, 'var(--g5)', `El % Full Price más bajo fue en <b>${esc(s[0].label)}</b> (${pct(s[0].p)}) y el más alto en <b>${esc(s[s.length - 1].label)}</b> (${pct(s[s.length - 1].p)}).`);
+  }
+  const champ = C.rfm.rows.find(r => r.label === 'Champions');
+  if (champ && champ.cl >= 20 && C.span >= 90) add(2, 'var(--g5)', `<b>${pct(champ.pNunca)}</b> de los Champions nunca compró Full Price: incluso los mejores clientes dependen del descuento.`);
+  if (C.ruleCmp) {
+    add(0, 'var(--warn)', `Con el precio full del catálogo VTEX, el revenue Full Price es <b>${pct(C.ruleCmp.cat)}</b>. Mirando solo la columna Descuento sería <b>${pct(C.ruleCmp.desc)}</b>: la diferencia son rebajas del precio de lista que no aparecen como descuento.`);
+    if (C.ruleCmp.cov != null && C.ruleCmp.cov < 0.9) add(0, 'var(--warn)', `Solo el <b>${pct(C.ruleCmp.cov)}</b> del revenue tiene precio full en el catálogo cargado; el resto se evalúa con la columna Descuento.`);
+  } else add(0, 'var(--warn)', 'Sin el catálogo VTEX, Full Price se mide solo con la columna Descuento y no detecta las rebajas del precio de lista. Carga el export Catalogados VTEX.');
+  if (C.ofImpact && C.ofImpact.now - C.ofImpact.alt > 0.02) add(4, 'var(--warn)', `Si se cuentan como descuento las compras de productos en colecciones de ofertas, el revenue Full Price baja de <b>${pct(C.ofImpact.now)}</b> a <b>${pct(C.ofImpact.alt)}</b>. Puedes activarlo en Criterios.`);
+  if (C.span < 90) add(0, 'var(--warn)', `El período tiene ${fmtInt(C.span)} días: solo ${pct(share(M.f + M.d, T.cl))} de los clientes compró dos veces. Carga al menos 6 meses para que la 2ª compra, el RFM y la estacionalidad sean representativos.`);
+  items.sort((a, b) => a.prio - b.prio);
+  return items;
+}
+function renderInsights(C){
+  const items = insightItems(C).slice(0, 8);
+  $('#insights').innerHTML = items.length ? items.map(i => `<li><i style="background:${i.color}"></i><span>${i.html}</span></li>`).join('') : '<li>Sin datos.</li>';
+}
+
+/* ---------- Exportación ---------- */
+function canExport(){ return !!DL || !window.claude; }
+async function saveFile(name, data){
+  if (DL) {
+    try { await DL.save({filename:name, data}); return 'saved'; }
+    catch (e) { return e && e.code === 'declined' ? 'declined' : 'error'; }
+  }
+  if (!window.claude) {
+    const blob = data instanceof Blob ? data : new Blob([data], {type:'text/csv;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+    return 'saved';
+  }
+  return 'error';
+}
+function csvCell(v){
+  if (v == null) return '';
+  if (typeof v === 'number') return isFinite(v) ? String(Math.round(v * 100) / 100).replace('.', ',') : '';
+  const s = String(v);
+  return /[";\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+async function exportSegment(){
+  const C = LAST; if (!C) return;
+  const o = expOptions(C).find(x => x.v === state.expSeg);
+  const list = [...C.core.clients.values()].filter(o.f).sort((a, b) => b.n - a.n);
+  const head = ['Email','Segmento Full Price','% revenue Full Price','Segmento RFM','Pedidos','Revenue neto','Ticket promedio','Primera compra','Última compra','Alto gasto','Oportunidad'];
+  const lines = [head.join(';')];
+  for (const c of list) lines.push([c.e, SEG[c.seg].label, c.share * 100, c.rfm || '', c.k, c.n, share(c.n, c.k), c.first, c.last, c.hs ? 'Sí' : 'No', c.opp ? 'Sí' : 'No'].map(csvCell).join(';'));
+  const name = `clientes-${o.v}-${new Date().toISOString().slice(0, 10)}.csv`;
+  const r = await saveFile(name, '\ufeff' + lines.join('\r\n'));
+  if (r === 'saved') setStatus(`Se descargó ${name} con ${fmtInt(list.length)} clientes.`, 'ok');
+  else if (r === 'error') setStatus('No se pudo descargar la lista. Intenta de nuevo en unos segundos.', 'err');
+}
+
+/* ---------- Tarjetas para presentación ---------- */
+const SL_W = 1120, SL_H = 600, SL_IN = 1076;
+function periodText(C){ return C.from ? `${dateLabel(C.from)} al ${dateLabel(C.to, true)}` : ''; }
+function slTable(cols, rows, footer){
+  let h = '<table class="sl-tbl"><thead><tr>' + cols.map(c => `<th class="${c.num ? 'num' : ''}">${c.label}</th>`).join('') + '</tr></thead><tbody>';
+  for (const r of rows) h += '<tr>' + cols.map(c => `<td class="${c.num ? 'num' : ''}">${c.render ? c.render(r) : esc(r[c.key])}</td>`).join('') + '</tr>';
+  if (!rows.length) h += `<tr><td colspan="${cols.length}" class="muted">Sin datos para el período elegido.</td></tr>`;
+  h += '</tbody>';
+  if (footer && rows.length) h += '<tfoot><tr>' + footer.map((v, i) => `<td class="${cols[i].num ? 'num' : ''}">${v}</td>`).join('') + '</tr></tfoot>';
+  return h + '</table>';
+}
+const slCard = (ttl, inner, style) => `<div class="sl-card"${style ? ` style="${style}"` : ''}>${ttl ? `<h3>${ttl}</h3>` : ''}${inner}</div>`;
+const slEmpty = msg => `<div class="sl-empty">${msg}</div>`;
+function slideShell(C, key, ttl, body){
+  const head = state.deckTitles ? `<div class="sl-head"><div class="sl-title">${ttl}</div><div class="sl-sub">Nike CL, ${esc(periodText(C))}</div></div>` : '';
+  const foot = state.deckTitles ? `<div class="sl-foot">Fuente: Análisis Daily. Revenue neto sin IVA, sin cancelados ni bolsas. Cliente Full Price: ${params.fpThr} % o más de su revenue en pedidos ${CATP.size ? 'pagados a precio full (catálogo VTEX)' : 'sin descuento'}${params.of ? ', ofertas cuentan como descuento' : ''}.</div>` : '';
+  return `<div class="slide-wrap"><div class="slide-box"><div class="slide" id="sl-${key}">${head}<div class="sl-body">${body}</div>${foot}</div></div>`
+    + `<div class="slide-tools"><span>${ttl}</span>${canExport() ? `<button type="button" class="btn" data-png="${key}">Descargar PNG</button>` : ''}</div></div>`;
+}
+function slideClientes(C){
+  const {T, fp, nofp, pCliFP, pRevFP} = C.S;
+  const d = (a, b) => b ? a / b - 1 : null;
+  const k = [
+    kpi('Clientes totales', '', fmtInt(T.cl), [['Pedidos', fmtInt(T.k)], ['Pedidos/cliente', nf2.format(T.freq || 0)]]),
+    kpi('Clientes Full Price', 'var(--fp)', pct(pCliFP), [['N° clientes', fmtInt(fp.cl)], ['No Full Price', fmtInt(nofp.cl)]]),
+    kpi('Revenue Full Price', 'var(--fp)', pct(pRevFP), [['Revenue FP', money(C.S.revFP)], ['Pedidos FP', pct(share(C.S.ordFP, T.k))]]),
+    kpi('Revenue neto', '', money(T.n), [['Ticket prom.', fmtMoney(T.aov)], ['Revenue/cliente', fmtMoney(T.rpc)]])
+  ];
+  const rows = [
+    {l:'Ticket promedio', a:fp.aov, b:nofp.aov, f:fmtMoney},
+    {l:'Revenue por cliente', a:fp.rpc, b:nofp.rpc, f:fmtMoney},
+    {l:'Pedidos por cliente', a:fp.freq, b:nofp.freq, f:v => v == null ? '—' : nf2.format(v)},
+    {l:'Unidades por pedido', a:fp.upo, b:nofp.upo, f:v => v == null ? '—' : nf2.format(v)},
+    {l:'Precio por unidad', a:fp.ppu, b:nofp.ppu, f:fmtMoney}
+  ];
+  const tbl = slTable([{label:'Métrica', render:r => r.l}, {label:'Full Price', num:true, render:r => `<b>${r.f(r.a)}</b>`}, {label:'No Full Price', num:true, render:r => r.f(r.b)},
+    {label:'Diferencia', num:true, render:r => `<span class="${diffCls(d(r.a, r.b))}">${varPct(d(r.a, r.b))}</span>`}], rows);
+  const items = insightItems(C).filter(i => i.prio <= 1).slice(0, 3);
+  const bar = (lab, a, b) => { const pa = share(a, a + b) || 0; return `<div class="sl-bar"><div class="lb"><span>${lab}</span></div><div class="bar">`
+    + (pa > 0 ? `<span style="width:${(pa * 100).toFixed(2)}%;background:${PAL_LIGHT.fp}">${pa > 0.12 ? 'Full Price ' + pct(pa) : ''}</span>` : '')
+    + (pa < 1 ? `<span style="width:${((1 - pa) * 100).toFixed(2)}%;background:${PAL_LIGHT.nofp}">${1 - pa > 0.12 ? 'No Full Price ' + pct(1 - pa) : ''}</span>` : '') + '</div></div>'; };
+  const bars = `<div class="sl-bars">${bar('Clientes', fp.cl, nofp.cl)}${bar('Revenue', fp.n, nofp.n)}</div>`;
+  const body = `<div class="sl-kpis">${k.join('')}</div><hr class="sl-sep"><div class="sl-row" style="grid-template-columns:1.2fr 1fr">`
+    + `<div class="sl-col" style="display:grid;gap:14px">${slCard('Full Price vs. No Full Price', tbl)}${slCard('Peso de los clientes Full Price', bars)}</div>`
+    + slCard('Lectura', `<ul class="sl-ins" style="grid-template-columns:1fr">${items.map(i => `<li><i style="background:${i.color}"></i><span>${i.html}</span></li>`).join('')}</ul>`)
+    + '</div>';
+  return slideShell(C, 'clientes', '¿Cuántos clientes Full Price tenemos?', body);
+}
+function slideSegmentos(C){
+  const rows = segRows(C);
+  const cards = rows.map(r => `<div class="sl-seg" style="--fc:${PAL_LIGHT[r.key]}"><span class="nm">${r.label}</span>`
+    + `<span class="lab">Rango: ${r.range} sin dcto.</span>`
+    + `<span class="lab" style="margin:0">% clientes</span><span class="big">${pct(r.pCl)}</span>`
+    + `<div class="r" style="margin-top:6px"><span>% revenue</span><b>${pct(r.pN)}</b></div>`
+    + `<div class="r"><span>Pedidos/cliente</span><b>${r.freq == null ? '—' : nf2.format(r.freq)}</b></div>`
+    + `<div class="r"><span>Ticket prom.</span><b>${fmtMoney(r.aov)}</b></div>`
+    + `<div class="r"><span>Revenue/cliente</span><b>${fmtMoney(r.rpc)}</b></div></div>`).join('');
+  const groups = rows.map(r => ({label:SEG[r.key].short, vals:[r.pCl || 0, r.pN || 0]}));
+  const chart = svgGrouped(groups, SL_IN - 24, 170, ['s2', 's3'], ['% clientes', '% revenue'], PAL_LIGHT, 'Clientes y revenue por segmento');
+  const body = `<div class="sl-segs">${cards}</div><hr class="sl-sep">`
+    + slCard('Peso de cada segmento en clientes y revenue', `<div class="legend sl-legend">${legendHTML([['s2', '% clientes'], ['s3', '% revenue']], PAL_LIGHT)}</div><div class="sl-chart">${chart}</div>`);
+  return slideShell(C, 'segmentos', 'Segmentación Full Price', body);
+}
+function slideSegunda(C){
+  const M = C.second, p = C.pat;
+  const d = (a, b) => b ? a / b - 1 : null;
+  let left;
+  if (!M.f && !M.d) left = slEmpty('Ningún cliente tiene dos pedidos en el período.');
+  else {
+    left = `<div class="sl-hl" style="grid-template-columns:1fr 1fr;padding:4px 12px 10px">`
+      + `<div><b>${pct(share(M.fd, M.f))}</b><span>de quienes compraron Full Price la 1ª vez recibe descuento en la 2ª</span></div>`
+      + `<div><b>${pct(share(M.dd, M.d))}</b><span>de quienes entraron con descuento sigue con descuento</span></div></div>`
+      + slTable([{label:'1ª compra', render:r => r.l}, {label:'2ª Full Price', num:true, render:r => `${pct(share(r.f, r.t))}<span class="sub">${fmtInt(r.f)} clientes</span>`},
+        {label:'2ª con descuento', num:true, render:r => `${pct(share(r.dd, r.t))}<span class="sub">${fmtInt(r.dd)} clientes</span>`}, {label:'Clientes', num:true, render:r => fmtInt(r.t)}],
+        [{l:'Full Price', f:M.ff, dd:M.fd, t:M.f}, {l:'Con descuento', f:M.df, dd:M.dd, t:M.d}])
+      + `<p class="sl-note" style="padding-top:8px">Clientes con 2 o más pedidos: ${fmtInt(M.f + M.d)} (${pct(share(M.f + M.d, C.S.T.cl))} de la base).</p>`;
+  }
+  const rows = [
+    {l:'Ticket promedio', a:p.fp.aov, b:p.d.aov, f:fmtMoney},
+    {l:'Unidades por pedido', a:p.fp.upo, b:p.d.upo, f:v => v == null ? '—' : nf2.format(v)},
+    {l:'Precio por unidad', a:p.fp.ppu, b:p.d.ppu, f:fmtMoney},
+    {l:'Pedidos', a:p.fp.k, b:p.d.k, f:fmtInt}
+  ];
+  const right = slTable([{label:'Métrica', render:r => r.l}, {label:'Pedido FP', num:true, render:r => r.f(r.a)}, {label:'Con descuento', num:true, render:r => r.f(r.b)},
+    {label:'Dif.', num:true, render:r => varPct(d(r.b, r.a))}], rows);
+  const lect = [];
+  if (M.f && M.d) {
+    const a = share(M.dd, M.d), b = share(M.fd, M.f);
+    lect.push(a > b ? `El hábito de descuento se adopta más rápido que el Full Price: <b>${pct(a)}</b> de quienes entran con descuento sigue así, mientras que <b>${pct(b)}</b> de quienes entran Full Price pasa a descuento.`
+      : `Quien entra con descuento no queda atado: <b>${pct(share(M.df, M.d))}</b> vuelve a comprar Full Price en su 2ª compra.`);
+  }
+  const du = d(p.d.upo, p.fp.upo), dp = d(p.d.ppu, p.fp.ppu);
+  if (du != null && Math.abs(du) > 0.05) lect.push(`Los pedidos con descuento llevan <b>${varPct(du)}</b> unidades: compra por volumen.`);
+  if (dp != null && Math.abs(dp) > 0.05) lect.push(`El precio por unidad en pedidos con descuento es <b>${varPct(dp)}</b> frente a los Full Price.`);
+  const right2 = right + (lect.length ? '' : '');
+  const body = `<div class="sl-row" style="grid-template-columns:1.15fr 1fr">${slCard('¿Qué pasa en la 2ª compra?', left)}`
+    + `<div style="display:grid;gap:14px">${slCard('Pedidos Full Price vs. con descuento', right2)}${lect.length ? slCard('Lectura', `<ul class="sl-ins" style="grid-template-columns:1fr">${lect.map(t => `<li><i style="background:${PAL_LIGHT.nofp}"></i><span>${t}</span></li>`).join('')}</ul>`) : ''}</div></div>`;
+  return slideShell(C, 'segunda', '¿Por qué podrían no comprar Full Price?', body);
+}
+function mixCols(first){
+  return [
+    {label:first, render:r => esc(r.label)},
+    {label:'% unidades', num:true, render:r => pct(r.pU)},
+    {label:'% revenue', num:true, render:r => pct(r.pN)},
+    {label:'% Full Price', num:true, render:r => pct(r.pFP)},
+    {label:'Gasto FP', num:true, render:r => pct(r.sF)},
+    {label:'Gasto No FP', num:true, render:r => pct(r.sN)},
+    {label:'Sobre-índice', num:true, render:r => `<span class="${diffCls(r.diff)}">${pp(r.diff)}</span>`}
+  ];
+}
+function slideMix(C){
+  if (!ATTR.size) return slideShell(C, 'mix', '¿Qué compraron? Mix de producto', slEmpty('Carga el stock por SKU para ver división y género.'));
+  const useTipo = CATP.size > 0;
+  const dv = C.mix('div'), gd = C.mix(useTipo ? 'tipo' : 'gender');
+  const body = slCard('Por división', slTable(mixCols('División'), dv.rows.sort((a, b) => b.n - a.n).slice(0, 4), ['Total', pct(1), pct(1), pct(dv.pFP), pct(1), pct(1), '']))
+    + '<hr class="sl-sep">'
+    + slCard(useTipo ? 'Por tipo de producto (principales)' : 'Por género', slTable(mixCols(useTipo ? 'Tipo de producto' : 'Género'), gd.rows.sort((a, b) => b.n - a.n).slice(0, 5), useTipo ? null : ['Total', pct(1), pct(1), pct(gd.pFP), pct(1), pct(1), '']))
+    + '<p class="sl-note" style="padding:10px 2px 0">% Full Price: revenue de cada grupo vendido sin descuento. Gasto FP / No FP: cómo reparten su gasto los clientes Full Price y No Full Price. Sobre-índice: diferencia entre ambos.</p>';
+  return slideShell(C, 'mix', '¿Qué compraron? Mix de producto', body);
+}
+function slideFranquicias(C){
+  const X = C.mix('fr');
+  const rows = X.rows.filter(r => r.label !== 'Otras').sort((a, b) => b.n - a.n).slice(0, 11);
+  const body = slCard(`Franquicias${ATTR.size ? ' de calzado' : ''}`, slTable(mixCols('Franquicia'), rows))
+    + '<p class="sl-note" style="padding:10px 2px 0">Franquicia según el nombre del producto. Sobre-índice positivo: pesa más en el gasto de los clientes Full Price que en el de los No Full Price.</p>';
+  return slideShell(C, 'franquicias', 'Franquicias y precio full', body);
+}
+function slideEstacionalidad(C){
+  const avg = C.S.pRevFP;
+  const chart = C.sea.list.length ? svgSeason(C.sea.list, SL_IN - 24, 330, PAL_LIGHT, avg) : slEmpty('Sin pedidos con fecha.');
+  const s = C.sea.list.filter(b => b.n > 0).sort((a, b) => a.p - b.p);
+  const lab = {month:'mes', week:'semana', day:'día'}[C.sea.gr];
+  const txt = s.length > 2 ? `Más bajo: <b>${esc(s[0].label)}</b> (${pct(s[0].p)}). Más alto: <b>${esc(s[s.length - 1].label)}</b> (${pct(s[s.length - 1].p)}). Promedio del período: <b>${pct(avg)}</b>.` : '';
+  const body = slCard(`% del revenue a precio full por ${lab}`, `<div class="legend sl-legend">${legendHTML([['hi', '5 pp o más sobre el promedio'], ['mid', 'Cerca del promedio'], ['lo', '5 pp o más bajo el promedio']], PAL_LIGHT)}</div><div class="sl-chart">${chart}</div>`)
+    + `<p class="sl-text" style="padding:12px 2px 0">${txt}</p>`;
+  return slideShell(C, 'estacionalidad', 'Estacionalidad del precio full', body);
+}
+function slideComparacion(C){
+  const D = cmpData();
+  if (!D) return slideShell(C, 'comparacion', 'Comparación de períodos', slEmpty('Sin datos.'));
+  const {P, rows} = D;
+  const tbl = slTable([{label:'Métrica', render:r => r.l}, {label:`${dateLabel(P.a1)} al ${dateLabel(P.a2, true)}`, num:true, render:r => r.f(r.a)},
+    {label:`${dateLabel(P.b1)} al ${dateLabel(P.b2, true)}`, num:true, render:r => `<b>${r.f(r.b)}</b>`},
+    {label:'Variación', num:true, render:r => `<span class="${diffCls(r.v)}">${r.t === 'pp' ? pp(r.v) : varPct(r.v)}</span>`}], rows);
+  const rev = rows.find(r => r.l === 'Revenue neto'), cl = rows.find(r => r.l === 'Clientes'), fpr = rows.find(r => r.l === '% clientes Full Price');
+  let txt = '';
+  if (rev && cl && fpr && rev.v != null && cl.v != null) txt = `Clientes <b>${varPct(cl.v)}</b>, revenue <b>${varPct(rev.v)}</b> y clientes Full Price <b>${pp(fpr.v)}</b>.` + (cl.v > 0 && rev.v < 0 ? ' La base creció en cantidad, no en valor de compra.' : '');
+  const pr = rows.filter(r => r.t === 'pp' && r.a != null && r.b != null);
+  const chart = svgGrouped(pr.map(r => ({label:r.l.replace('% clientes Full Price', 'Clientes FP').replace('% revenue Full Price', 'Revenue FP').replace('% Full Price ', 'FP '), vals:[r.a, r.b]})),
+    Math.floor((SL_IN - 14) * 0.45) - 20, 300, ['s2', 's3'], ['Período A', 'Período B'], PAL_LIGHT, 'Indicadores Full Price por período');
+  const body = `<div class="sl-row" style="grid-template-columns:1.22fr 1fr">${slCard('', tbl)}`
+    + slCard('% Full Price por período', `<div class="legend sl-legend">${legendHTML([['s2', `A: ${dateLabel(P.a1)} al ${dateLabel(P.a2, true)}`], ['s3', `B: ${dateLabel(P.b1)} al ${dateLabel(P.b2, true)}`]], PAL_LIGHT)}</div><div class="sl-chart">${chart}</div>`)
+    + '</div>' + (txt ? `<p class="sl-text" style="padding:12px 2px 0">${txt}</p>` : '');
+  return slideShell(C, 'comparacion', 'Comparación de períodos', body);
+}
+function slideRFM(C){
+  const R = C.rfm;
+  if (!R.rows.length) return slideShell(C, 'rfm', 'RFM cruzado con Full Price', slEmpty('Sin clientes.'));
+  const champ = R.rows.find(r => r.label === 'Champions'), leal = R.rows.find(r => r.label === 'Leales');
+  const hl = `<div class="sl-hl" style="grid-template-columns:repeat(4,1fr);margin-bottom:10px">`
+    + (champ ? `<div><b>${fmtInt(champ.cl)}</b><span>Champions, ${money(champ.n)} de revenue</span></div><div><b>${pct(champ.pNunca)}</b><span>de los Champions nunca compró Full Price</span></div>` : '')
+    + (leal ? `<div><b>${fmtInt(leal.cl)}</b><span>Leales, ${money(leal.n)} de revenue</span></div><div><b>${pct(leal.pNunca)}</b><span>de los Leales nunca compró Full Price</span></div>` : '')
+    + '</div>';
+  const tbl = slTable([{label:'Segmento RFM', render:r => r.label}, {label:'Clientes', num:true, render:r => fmtInt(r.cl)}, {label:'% revenue', num:true, render:r => pct(r.pN)},
+    {label:'Pedidos/cliente', num:true, render:r => nf2.format(r.freq || 0)}, {label:'% FP (≥ 50 %)', num:true, render:r => pct(r.pFP)},
+    {label:'% nunca FP', num:true, render:r => `<span class="${r.pNunca > 0.6 ? 'down' : ''}">${pct(r.pNunca)}</span>`}, {label:'Mezcla Full Price', render:r => segMix(r.segN)}], R.rows);
+  const leg = `<div class="legend sl-legend" style="padding:8px 2px 0">${legendHTML(SEGS.map(x => [x.k, x.label]), PAL_LIGHT)}</div>`;
+  const body = (champ || leal ? hl : '') + slCard('', tbl) + leg + (C.span < 90 ? `<p class="sl-note" style="padding:8px 2px 0">Con ${fmtInt(C.span)} días de venta el RFM es poco representativo.</p>` : '');
+  return slideShell(C, 'rfm', 'RFM cruzado con comportamiento Full Price', body);
+}
+function slideOportunidad(C){
+  const O = C.opp;
+  if (!O) return slideShell(C, 'oportunidad', 'La oportunidad de mayor tamaño', slEmpty('Sin clientes.'));
+  const k = [
+    kpi('Clientes', 'var(--g4)', fmtInt(O.O.cl), [['% de la base', pct(share(O.O.cl, O.T.cl))]]),
+    kpi('Revenue', '', money(O.O.n), [['% del revenue', pct(share(O.O.n, O.T.n))]]),
+    kpi('Nunca compró FP', 'var(--g5)', pct(O.nunca), [['Pedidos/cliente', nf2.format(O.O.freq || 0)]]),
+    kpi('Revenue/cliente', '', fmtMoney(O.O.rpc), [['Ticket prom.', fmtMoney(O.O.aov)]])
+  ];
+  const rows = O.frRows.filter(r => r.label !== 'Otras' && (r.pO > 0.01 || r.pR > 0.01)).sort((a, b) => b.pO - a.pO).slice(0, 7);
+  const tbl = slTable([{label:'Franquicia', render:r => esc(r.label)}, {label:'Oportunidad', num:true, render:r => `<b>${pct(r.pO)}</b>`}, {label:'Resto de la base', num:true, render:r => pct(r.pR)},
+    {label:'Diferencia', num:true, render:r => `<span class="${diffCls(r.diff)}">${pp(r.diff)}</span>`}], rows);
+  const pref = rows.filter(r => r.diff > 0.005).slice(0, 3).map(r => r.label);
+  const txt = `Clientes en el top ${params.top} % por revenue con menos de 20 % de su gasto a precio full. Es revenue que ya entra: mover una parte a un patrón Mixto impacta el margen sin crear demanda nueva.`
+    + (pref.length ? ` Ya prefieren <b>${pref.map(esc).join(', ')}</b>: conviene apoyar la oferta full en esas franquicias.` : '');
+  const body = `<div class="sl-kpis">${k.join('')}</div><hr class="sl-sep"><div class="sl-row" style="grid-template-columns:1.1fr 1fr">`
+    + slCard(`Mix de franquicias${ATTR.size ? ' de calzado' : ''}`, tbl) + slCard('Por qué importa', `<p class="sl-text">${txt}</p>`) + '</div>';
+  return slideShell(C, 'oportunidad', 'La oportunidad de mayor tamaño', body);
+}
+function slideLecturas(C){
+  const items = insightItems(C).slice(0, 8);
+  const body = slCard('Qué nos dicen los datos', `<ul class="sl-ins">${items.map(i => `<li><i style="background:${i.color}"></i><span>${i.html}</span></li>`).join('')}</ul>`, 'flex:1 1 0;min-height:0');
+  return slideShell(C, 'lecturas', 'Lecturas clave', body);
+}
+function renderDeck(C){
+  $('#slides').innerHTML = [slideClientes(C), slideSegmentos(C), slideSegunda(C), slideMix(C), slideFranquicias(C), slideEstacionalidad(C), slideComparacion(C), slideRFM(C), slideOportunidad(C), slideLecturas(C)].join('');
+  fitDeck();
+}
+function fitDeck(){
+  const wrap = $('#slides');
+  if (!wrap || $('#deck').hidden) return;
+  const avail = wrap.clientWidth; if (!avail) return;
+  const s = Math.min(1, avail / SL_W, Math.max(0.35, (window.innerHeight - 60) / SL_H));
+  wrap.querySelectorAll('.slide-box').forEach(b => {
+    b.style.width = Math.ceil(SL_W * s) + 'px'; b.style.height = Math.ceil(SL_H * s) + 'px';
+    b.firstElementChild.style.transform = `scale(${s})`;
+  });
+}
+let H2C = null;
+function loadH2C(){
+  if (window.html2canvas) return Promise.resolve(window.html2canvas);
+  if (!H2C) H2C = new Promise((res, rej) => {
+    const sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    sc.onload = () => window.html2canvas ? res(window.html2canvas) : rej(new Error('html2canvas'));
+    sc.onerror = () => { H2C = null; rej(new Error('html2canvas')); };
+    document.head.appendChild(sc);
+  });
+  return H2C;
+}
+async function exportSlide(key, btn){
+  const el = document.getElementById('sl-' + key); if (!el) return;
+  const label = btn.textContent; btn.disabled = true; btn.textContent = 'Generando…';
+  let msg = label;
+  try {
+    const h2c = await loadH2C();
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    const canvas = await h2c(el, {scale:2, backgroundColor:'#ffffff', logging:false, windowWidth: Math.max(document.documentElement.clientWidth, SL_W + 80),
+      onclone: doc => { const c = doc.getElementById('sl-' + key); if (!c) return; c.style.transform = 'none'; const b = c.parentElement; b.style.width = SL_W + 'px'; b.style.height = SL_H + 'px'; b.style.overflow = 'visible'; }});
+    const blob = await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('blob')), 'image/png'));
+    const r = await saveFile(`clientes-${key}-${new Date().toISOString().slice(0, 10)}.png`, blob);
+    msg = r === 'saved' ? 'Descargada' : r === 'declined' ? label : 'No se pudo descargar';
+  } catch (e) { msg = 'No se pudo generar: usa una captura'; }
+  btn.textContent = msg;
+  setTimeout(() => { btn.textContent = label; btn.disabled = false; }, 2400);
+}
+
+/* ---------- Render principal ---------- */
+function render(){
+  const ready = ROWS.length > 0;
+  const deck = state.view === 'deck';
+  $('#dash').hidden = !ready || deck;
+  $('#deck').hidden = !ready || !deck;
+  $('#controls').hidden = !ready;
+  $('#intro').hidden = ready;
+  updateRange();
+  if (!ready) return;
+  const C = compute();
+  LAST = C;
+  if (deck) { renderDeck(C); return; }
+  renderKpis(C);
+  renderInsights(C);
+  renderSegTable(C);
+  $('#second').innerHTML = secondHTML(C);
+  $('#patterns').innerHTML = patternsHTML(C);
+  renderMix(C);
+  renderSeason(C);
+  renderCmp();
+  renderRFM(C);
+  renderOpp(C);
+  renderExport(C);
+}
+function updateRange(){
+  const parts = [];
+  if (ROWS.length) {
+    const a = state.filters.from || BOUNDS.min, b = state.filters.to || BOUNDS.max;
+    if (a) parts.push(`venta neta del <b>${dateLabel(a)}</b> al <b>${dateLabel(b, true)}</b>`);
+    if (LAST) parts.push(`<b>${fmtInt(LAST.S.T.cl)}</b> clientes`);
+  }
+  $('#range').innerHTML = parts.join(', ');
+  for (const id of ['#f-from', '#f-to']) { const el = $(id); el.min = BOUNDS.min || ''; el.max = BOUNDS.max || ''; }
+  $('#f-from').value = state.filters.from; $('#f-to').value = state.filters.to;
+}
+function setStatus(msg, kind){ const el = $('#status'); el.textContent = msg || ''; el.className = 'status' + (kind ? ' ' + kind : ''); }
+
+/* ---------- Parámetros ---------- */
+function loadParams(){
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) return {...DEFAULTS, ...JSON.parse(raw)}; } catch (e) {}
+  return {...DEFAULTS};
+}
+function saveParams(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(params)); } catch (e) {} }
+function paintParams(){
+  $('#p-thr').value = params.fpThr; $('#p-of').checked = params.of; $('#p-ofterms').value = params.ofTerms;
+  $('#p-top').value = params.top; $('#p-excl').value = params.excl;
+  $('#params-sum').textContent = `Cliente FP desde ${params.fpThr} %, alto gasto top ${params.top} %${params.of ? ', ofertas cuentan como descuento' : ''}`;
+}
+function onParamsChange(){
+  const n = (id, def, lo, hi) => { const v = Math.round(parseNum($(id).value)); return v >= lo && v <= hi ? v : def; };
+  params.fpThr = n('#p-thr', DEFAULTS.fpThr, 1, 100);
+  params.top = n('#p-top', DEFAULTS.top, 1, 50);
+  params.of = $('#p-of').checked;
+  params.ofTerms = $('#p-ofterms').value.trim() || OF_DEFAULT;
+  params.excl = $('#p-excl').value.trim() || EXCL_DEFAULT;
+  saveParams(); paintParams();
+  const note = rebuild(); renderFileLists(); render();
+  if (note) setStatus(note, 'warn');
+}
+
+/* ---------- Carga ---------- */
+async function addFiles(kind, list){
+  const arr = filesOf(kind);
+  const files = [...list], max = MAXF[kind], room = max - arr.length;
+  if (room <= 0) { setStatus(`Ya hay ${max} archivos. Quita uno para sumar otro.`, 'warn'); return; }
+  const msgs = []; let kindMsg = 'ok';
+  for (const f of files.slice(0, room)) {
+    if (arr.some(x => x.name === f.name && x.size === f.size)) { msgs.push(`${f.name} ya estaba cargado.`); kindMsg = 'warn'; continue; }
+    setStatus(`Leyendo ${f.name}…`); await nextFrame();
+    try {
+      const parsed = kind === 'sales' ? await parseSalesFile(f) : kind === 'cat' ? await parseCatalogFile(f) : await parseStockFile(f);
+      arr.push(parsed);
+      msgs.push(kind === 'sales' ? `${f.name}: ${fmtInt(parsed.rows.length)} líneas leídas.` : `${f.name}: ${fmtInt(parsed.scCount)} productos leídos.`);
+    } catch (e) { msgs.push(`No se pudo leer ${f.name}: ${e.message}`); kindMsg = 'err'; }
+  }
+  if (files.length > room) { msgs.push(`Se tomaron solo ${room} archivo(s): el máximo es ${max}.`); if (kindMsg === 'ok') kindMsg = 'warn'; }
+  setStatus('Calculando…'); await nextFrame();
+  const note = rebuild(); if (note) { msgs.push(note); if (kindMsg === 'ok') kindMsg = 'warn'; }
+  renderFileLists(); render();
+  setStatus(msgs.join(' '), kindMsg);
+}
+function wireDrop(kind){
+  const zone = $('#drop-' + kind), input = $('#in-' + kind);
+  zone.addEventListener('click', e => {
+    const rm = e.target.closest('[data-rm]');
+    if (rm) {
+      const [k, i] = rm.dataset.rm.split(':');
+      const arr = filesOf(k);
+      const [gone] = arr.splice(+i, 1);
+      rebuild(); renderFileLists(); render();
+      setStatus(`${gone.name} se quitó.`);
+      return;
+    }
+    if (e.target.closest('[data-pick]')) input.click();
+  });
+  zone.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-pick]')) { e.preventDefault(); input.click(); } });
+  input.addEventListener('change', () => { if (input.files.length) addFiles(kind, input.files); input.value = ''; });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', e => { if (!zone.contains(e.relatedTarget)) zone.classList.remove('over'); });
+  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('over'); if (e.dataTransfer.files.length) addFiles(kind, e.dataTransfer.files); });
+}
+
+/* ---------- Eventos ---------- */
+function wire(){
+  wireDrop('sales'); wireDrop('cat'); wireDrop('stock');
+  for (const id of ['#p-thr', '#p-of', '#p-ofterms', '#p-top', '#p-excl']) $(id).addEventListener('change', onParamsChange);
+  $('#p-reset').addEventListener('click', () => { params = {...DEFAULTS}; saveParams(); paintParams(); rebuild(); renderFileLists(); render(); });
+  $('#f-from').addEventListener('change', e => { state.filters.from = e.target.value; state.cmp = null; render(); });
+  $('#f-to').addEventListener('change', e => { state.filters.to = e.target.value; state.cmp = null; render(); });
+  $('#f-clear').addEventListener('click', () => { state.filters = {from:'', to:''}; state.cmp = null; render(); });
+  $$('#view-seg [data-view]').forEach(b => b.addEventListener('click', () => {
+    state.view = b.dataset.view;
+    $$('#view-seg [data-view]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    render();
+  }));
+  $$('#dim-seg [data-dim]').forEach(b => b.addEventListener('click', () => {
+    state.dim = b.dataset.dim;
+    $$('#dim-seg [data-dim]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    if (LAST) renderMix(LAST);
+  }));
+  for (const id of ['#cmp-a1', '#cmp-a2', '#cmp-b1', '#cmp-b2']) $(id).addEventListener('change', () => {
+    const v = {a1:$('#cmp-a1').value, a2:$('#cmp-a2').value, b1:$('#cmp-b1').value, b2:$('#cmp-b2').value};
+    if (v.a1 && v.a2 && v.b1 && v.b2) { state.cmp = v; renderCmp(); }
+  });
+  $('#exp-seg').addEventListener('change', e => { state.expSeg = e.target.value; if (LAST) renderExport(LAST); });
+  $('#exp-btn').addEventListener('click', exportSegment);
+  $('#deck-titles').addEventListener('change', e => { state.deckTitles = e.target.checked; render(); });
+  $('#slides').addEventListener('click', e => { const b = e.target.closest('[data-png]'); if (b && !b.disabled) exportSlide(b.dataset.png, b); });
+  window.addEventListener('resize', () => requestAnimationFrame(fitDeck));
+  new ResizeObserver(() => requestAnimationFrame(fitDeck)).observe($('#deck'));
+  let raf;
+  new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { if (LAST && !$('#dash').hidden) renderSeason(LAST); }); }).observe($('#c-sea'));
+}
+
+paintParams();
+renderFileLists();
+wire();
+render();
+if (window.claude && typeof window.claude.use === 'function') {
+  window.claude.use('downloads').then(d => { DL = d; if (LAST) render(); }).catch(() => {});
+}
+})();
+</script>
+</body>
+</html>
